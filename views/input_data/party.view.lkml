@@ -96,13 +96,13 @@ view: party {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-	party_id,
-	risk_case_event.count,
-	account_party_link.count,
-	party_registration.count,
-	explainability.count,
-	predictions.count
-	]
+  party_id,
+  risk_case_event.count,
+  account_party_link.count,
+  party_registration.count,
+  explainability.count,
+  predictions.count
+  ]
   }
 
 }
@@ -115,10 +115,10 @@ view: party__residencies {
     hidden: yes
     sql: party__residencies ;;
   }
-  dimension: region_code {
+  dimension: residencies_region_code {
     type: string
     description: "MANDATORY: Country or region in two-letter Unicode CLDR code format."
-    sql: region_code ;;
+    sql: party__residencies.region_code;;
   }
 }
 
@@ -130,9 +130,9 @@ view: party__nationalities {
     hidden: yes
     sql: party__nationalities ;;
   }
-  dimension: region_code {
+  dimension: nationalities_region_code {
     type: string
     description: "MANDATORY: Country or region in two-letter Unicode CLDR code format."
-    sql: region_code ;;
+    sql: party__nationalities.region_code ;;
   }
 }
