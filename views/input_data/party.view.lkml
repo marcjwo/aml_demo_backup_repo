@@ -107,6 +107,13 @@ view: party {
 
 }
 
+####### FOR THE BELOW:
+
+# the nested fields can contain a list of region codes for example. Need to find out what the desired outcome is here. Can a party have multiple nationalities and if so, should they stick in one column, or result in a repeated record?
+
+#######
+
+
 view: party__residencies {
 
   dimension: party__residencies {

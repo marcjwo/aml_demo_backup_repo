@@ -32,4 +32,23 @@ explore: output_data {
     relationship: one_to_many
     type: left_outer
   }
+
+  join: explainability {
+    view_label: "Explainability"
+    sql_on: ${output_data.party_id} = ${explainability.party_id} ;;
+    type: left_outer
+    relationship: many_to_one
+
+  }
+
+  join: explainability__attributions {
+    view_label: "Explainability: Attributions"
+    sql: LEFT JOIN UNNEST(ARRAY(
+          (SELECT AS STRUCT *,GENERATE_UUID() as id
+          FROM UNNEST(${explainability.attributions}))
+          )) as table_name__record_name ;; #### this is required to be able to define a primary key which doesnt exist as is for the nested records.
+    # sql: LEFT JOIN UNNEST(${explainability.attributions}) as explainability__attributions ;;
+    relationship: one_to_many
+    type: left_outer
+  }
 }

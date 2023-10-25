@@ -37,4 +37,34 @@ view: account_party_link {
     type: count
     drill_fields: [party.party_id]
   }
+
+
+  #### Added for UX
+
+  dimension: button {
+    sql: ${account_id} ;;
+    type: string
+    html: <div style="text-align: center; min-height: 60px; padding: 25px;">
+<a style="
+  color: #fff;
+    background-color: #4285F4;
+    border-color: #4285F4;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    padding: 10px;
+    margin: 5px;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 5px;"
+    href="https://cloudcenorthamfinserv.cloud.looker.com/dashboards/29?Account+ID={{ value }}">
+    See transactions for account {{ value }}!
+</a>
+</div> ;;
+  }
+
+  ####
+
 }
