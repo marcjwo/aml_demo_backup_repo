@@ -38,7 +38,14 @@ explore: input_data {
     view_label: "Risk Case Events"
     sql_on: ${input_data.party_id} = ${risk_case_event.party_id} ;;
     relationship: one_to_many
-    type: left_outer
+    type: inner
+  }
+
+  join: risk_event_type_mapping {
+    view_label: "Risk Case Events"
+    sql_on: ${risk_case_event.risk_case_id} = ${risk_event_type_mapping.risk_case_id} ;;
+    relationship: many_to_one
+    type: inner
   }
 
   join: party_registration {
