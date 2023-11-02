@@ -6,6 +6,10 @@ include: "/explores/input_data.explore.lkml"
 
 include: "/explores/output_data.explore.lkml"
 
+# include: "/views/explainability.view.lkml"
+
+# include: "/views/input_data/risk_event_type_mapping_aiaml.view.lkml"
+
 
 # include: "/**/*.view.lkml"                 # include all views in this project
 # include: "my_dashboard.dashboard.lookml"   # include a LookML dashboard called my_dashboard

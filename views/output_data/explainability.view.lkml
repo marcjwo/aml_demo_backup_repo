@@ -1,12 +1,12 @@
 # Un-hide and use this explore, or copy the joins into another explore, to get all the fully nested relationships from this view
-explore: explainability {
-  hidden: no
-    join: explainability__attributions {
-      view_label: "Explainability: Attributions"
-      sql: LEFT JOIN UNNEST(${explainability.attributions}) as explainability__attributions ;;
-      relationship: one_to_many
-    }
-}
+# explore: explainability_old {
+#   hidden: no
+#     join: explainability__attributions {
+#       view_label: "Explainability: Attributions"
+#       sql: LEFT JOIN UNNEST(${explainability_old.attributions}) as explainability__attributions ;;
+#       relationship: one_to_many
+#     }
+# }
 view: explainability {
   sql_table_name: `finserv-looker-demo.outputs.explainability` ;;
 
