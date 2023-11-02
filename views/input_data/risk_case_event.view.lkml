@@ -30,8 +30,16 @@ view: risk_case_event {
     description: "MANDATORY: Type of risk case event. Only AML events are supported. The minimum requirement for the AML product to work is to provide a single AML_PROCESS_START, AML_PROCESS_END and where applicable AML_EXIT event per Party and risk_case_id. It is strongly recommended to also include AML_SUSPICIOUS_ACTIVITY_START and AML_SUSPICIOUS_ACTIVITY_END events for best model performance. One of: [AML_SUSPICIOUS_ACTIVITY_START:AML_SUSPICIOUS_ACTIVITY_END:AML_PROCESS_START:AML_PROCESS_END:AML_ALERT_GOOGLE:AML_ALERT_LEGACY:AML_ALERT_ADHOC:AML_ALERT_EXPLORATORY:AML_SAR:AML_EXTERNAL:AML_EXIT]."
     sql: ${TABLE}.type ;;
   }
+
+  dimension: positive_case_flag{
+    type: yesno
+    sql: ${type} = 'AML_EXIT' ;;
+  }
+
+  dimension: negative_case_flag {}
   measure: count {
     type: count
     drill_fields: [risk_case_event_id, party.party_id]
   }
+
 }
