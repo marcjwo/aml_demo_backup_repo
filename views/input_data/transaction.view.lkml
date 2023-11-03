@@ -29,7 +29,7 @@ view: transaction {
   dimension: direction {
     type: string
     description: "MANDATORY: Direction of the transaction assets flow from the point of view of the specified account ID. Uses common definition of credit/debit in banking. Supported values: DEBIT, represents a transfer of value from this account; CREDIT, represents a transfer of value to this account One of: [DEBIT:CREDIT]."
-    sql: ${TABLE}.direction ;;
+    sql: INITCAP(${TABLE}.direction) ;;
   }
   dimension: is_entity_deleted {
     type: yesno
@@ -77,4 +77,19 @@ view: transaction {
     type: count
     drill_fields: [transaction_id]
   }
+
+  ####
+
+  dimension: direction_helper {
+    type: number
+    sql: CASE WHEN ${direction} = "Credit" THEN 1 ELSE -1 END ;;
+  }
+
+  measure: direction_measure {
+    type: sum
+    sql: ${direction_helper} ;;
+  }
+
+
+  ####
 }

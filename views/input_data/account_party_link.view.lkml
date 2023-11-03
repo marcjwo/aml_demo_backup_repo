@@ -42,7 +42,7 @@ view: account_party_link {
   #### Added for UX
 
   dimension: button {
-    sql: ${account_id} ;;
+    sql: ${party_id} ;;
     type: string
     html: <div style="text-align: center; min-height: 60px; padding: 25px;">
 <a style="

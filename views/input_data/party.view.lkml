@@ -49,7 +49,7 @@ view: party {
   dimension: gender {
     type: string
     description: "RECOMMENDED: Gender string for individuals. Typically used for fairness evaluation."
-    sql: ${TABLE}.gender ;;
+    sql: CASE WHEN ${TABLE}.gender = "F" then "Female" WHEN ${TABLE}.gender = "M" THEN "Male" else "NA" END ;;
   }
   dimension: is_entity_deleted {
     type: yesno
@@ -80,7 +80,7 @@ view: party {
   dimension: type {
     type: string
     description: "MANDATORY: Type of this party, to differentiate between a natural person or a legal entity. One of: [COMPANY:CONSUMER]."
-    sql: ${TABLE}.type ;;
+    sql: CASE WHEN ${TABLE}.type = "COMPANY" THEN "Company" ELSE "Consumer" END ;;
   }
   dimension_group: validity_start {
     type: time
