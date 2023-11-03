@@ -9,12 +9,15 @@ view: risk_event_type_mapping {
     sql: ${TABLE}.risk_case_id ;;
   }
   dimension: risk_label {
+    label: " Risk Typology"
     type: string
     description: "The risk type of this risk case id as per customer classification."
     sql: ${TABLE}.risk_label ;;
   }
   measure: positive_cases {
     type: count
+   drill_fields: [risk_case_id]
+
   }
 
   ####
@@ -28,12 +31,15 @@ view: risk_event_type_mapping {
     type: count
     # sql: ${risk_case_id} ;;
     filters: [detected: "Yes"]
+    drill_fields: [risk_case_id]
+
   }
 
   measure: missed_cases {
     type: count
     # sql: ${risk_case_id} ;;
     filters: [detected: "No"]
+    drill_fields: [risk_case_id]
   }
 
   measure: recall_percentage {
