@@ -48,5 +48,26 @@ view: risk_event_type_mapping {
     sql: ${missed_cases}/${positive_cases} ;;
   }
 
+  dimension: model_improv {
+    type: number
+    sql: ${TABLE}.model_improv ;;
+  }
+
+  measure: model_improv_measure {
+    type: average
+    sql: ${model_improv} ;;
+  }
+
+  measure: additional_finds {
+    type: number
+    sql: Round(${model_improv_measure}*${detected_cases}) ;;
+  }
+
+  measure: total_performance {
+    type: number
+    value_format_name: percent_2
+    sql: (${detected_cases}+${additional_finds})/${positive_cases} ;;
+  }
+
   ####
 }
