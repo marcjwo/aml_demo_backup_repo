@@ -1,4 +1,5 @@
 include: "/views/input_data/*.*"
+include: "/views/input_data/risk_level_mapping.view.lkml"
 
 explore: input_data {
   label: "Input Data"
@@ -53,6 +54,12 @@ explore: input_data {
     sql_on: ${input_data.party_id} = ${party_registration.party_id} ;;
     relationship: many_to_one
     type: left_outer
+  }
+  join: risk_level_mapping {
+    view_label: "Risk Case Events"
+    relationship: one_to_one
+    type: inner
+    sql_on: ${risk_level_mapping.risk_typology} = ${risk_event_type_mapping.risk_label} ;;
   }
 
 }
