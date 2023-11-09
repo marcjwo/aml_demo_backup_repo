@@ -1,5 +1,6 @@
 include: "/views/input_data/*.*"
-include: "/views/input_data/risk_level_mapping.view.lkml"
+
+# include: "/views/input_data/risk_level_mapping.view.lkml"
 
 explore: input_data {
   label: "Input Data"

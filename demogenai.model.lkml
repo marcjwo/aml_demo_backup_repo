@@ -8,6 +8,8 @@ include: "/explores/output_data.explore.lkml"
 
 include: "/views/input_data/risk_event_type_evaluation.view.lkml"
 
+include: "/views/input_data/risk_development_augmented.view.lkml"
+
 # include: "/views/explainability.view.lkml"
 
 # include: "/views/input_data/risk_event_type_mapping_aiaml.view.lkml"
