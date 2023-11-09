@@ -31,17 +31,58 @@ view: risk_case_event {
     sql: ${TABLE}.type ;;
   }
 
-  # measure: positive_cases {
-  #   type: count_distinct
-  #   sql: ${risk_case_event_id} ;;
-  #   filters: [type: "AML_EXIT"]
-  #   drill_fields: [risk_case_id, party_id]
-  # }
+  dimension: recalls {
+    hidden: yes
+    case: {
+      when: {
+        sql: ${type} != "AML_EXIT" OR ${type} != "AML_SAR";;
+        label: "Recall"
+      }
+      else: "Other"
+  }
+  }
 
-  dimension: negative_case_flag {}
-  measure: count {
-    type: count
-    drill_fields: [risk_case_event_id, party.party_id]
+
+  measure: total_recalls {
+    type: count_distinct
+    sql: ${risk_case_id} ;;
+    filters: [recalls: "Recall"]
+  }
+
+
+  measure: total_investigations_started {
+    type: count_distinct
+    sql: ${risk_case_id} ;;
+    filters: [type: "AML_PROCESS_START"]
+    drill_fields: [risk_case_id, party_id]
+  }
+
+  measure: total_investigations_completed {
+    type: count_distinct
+    sql: ${risk_case_id} ;;
+    filters: [type: "AML_PROCESS_START"]
+    drill_fields: [risk_case_id, party_id]
+  }
+
+  measure: total_sars_filed {
+    type: count_distinct
+    sql: ${risk_case_id} ;;
+    filters: [type: "AML_SAR"]
+    drill_fields: [risk_case_id, party_id]
+  }
+
+  measure: total_false_positives{
+    type: count_distinct
+    sql: ${risk_case_id} ;;
+    filters: [type: "AML_EXIT"]
+    drill_fields: [risk_case_id, party_id]
+  }
+
+  #dimension: negative_case_flag {}
+  measure: total_alerts {
+    type: count_distinct
+    sql: ${risk_case_id} ;;
+    drill_fields: [risk_case_id, party_id]
   }
 
 }

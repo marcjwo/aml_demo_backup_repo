@@ -4,7 +4,7 @@ view: predictions {
   dimension: party_id {
     primary_key: yes            #### will this work in combination with risk_period_end? Mock data does not indicate, likely to create surrogate key with farm_fingerprint
     type: string
-    hidden: yes
+ #   hidden: yes
     sql: ${TABLE}.party_id ;;
   }
   dimension_group: risk_period_end {

@@ -15,6 +15,7 @@ view: risk_event_type_mapping {
     sql: ${TABLE}.risk_label ;;
   }
   measure: positive_cases {
+    hidden: yes
     type: count
    drill_fields: [risk_case_id]
 
@@ -23,11 +24,13 @@ view: risk_event_type_mapping {
   ####
 
   dimension: detected {
+    hidden: yes
     type: string
     sql: ${TABLE}.detected ;;
   }
 
   measure: detected_cases {
+    hidden: yes
     type: count
     # sql: ${risk_case_id} ;;
     filters: [detected: "Yes"]
