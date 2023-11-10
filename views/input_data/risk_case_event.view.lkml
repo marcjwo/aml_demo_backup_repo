@@ -31,17 +31,11 @@ view: risk_case_event {
     sql: ${TABLE}.type ;;
   }
 
-  # measure: positive_cases {
-  #   type: count_distinct
-  #   sql: ${risk_case_event_id} ;;
-  #   filters: [type: "AML_EXIT"]
-  #   drill_fields: [risk_case_id, party_id]
-  # }
 
-  dimension: negative_case_flag {}
-  measure: count {
-    type: count
-    drill_fields: [risk_case_event_id, party.party_id]
-  }
+  # dimension: negative_case_flag {}
+  # measure: count {
+  #   type: count
+  #   drill_fields: [risk_case_event_id, party.party_id]
+  # }
 
 }
