@@ -2,7 +2,7 @@ view: predictions_augmented {
   sql_table_name: `finserv-looker-demo.outputs.predictions_augmented` ;;
 
   dimension: party_exit_augment {
-    hidden: yes
+   # hidden: yes
     type: number
     sql: ${TABLE}.party_exit_augment ;;
   }
@@ -52,17 +52,20 @@ view: predictions_augmented {
 
   measure: total_exits {
     type: count_distinct
-    sql: ${party_exit_result} = "Exited" ;;
+    sql: ${party_id};;
+    filters: [party_exit_result: "Exited"]
   }
 
   measure: total_investigations {
     type: count_distinct
-    sql: ${party_exit_result} = "Investigated" ;;
+    sql: ${party_id};;
+    filters: [party_exit_result: "Investigated"]
   }
 
   measure: total_not_investigated {
     type: count_distinct
-    sql: ${party_exit_result} = "Not Investigated" ;;
+    sql: ${party_id};;
+    filters: [party_exit_result: "Not Investigated"]
   }
   measure: total_false_positives{
     type: number
