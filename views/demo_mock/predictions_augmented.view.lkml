@@ -69,7 +69,7 @@ view: predictions_augmented {
   }
   measure: total_false_positives{
     type: number
-    sql: ${total_investigations} - ${total_exits} ;;
+    sql: ${total_exits} - ${total_investigations} ;;
   }
 
   measure: false_positives_rate{
