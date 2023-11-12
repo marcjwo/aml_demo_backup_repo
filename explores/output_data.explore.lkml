@@ -1,5 +1,6 @@
 include: "/views/output_data/*.*"
 include: "/views/input_data/*.*"
+include: "/views/demo_mock/*"
 
 explore: output_data {
   label: "Output Data"
@@ -26,9 +27,16 @@ explore: output_data {
     relationship: one_to_many
   }
 
-  join: predictions {
+  # join: predictions {
+  #   view_label: "Predictions"
+  #   sql_on: ${party.party_id} = ${predictions.party_id} ;;
+  #   relationship: one_to_many
+  #   type: left_outer
+  # }
+
+  join: predictions_augmented {
     view_label: "Predictions"
-    sql_on: ${party.party_id} = ${predictions.party_id} ;;
+    sql_on: ${party.party_id} = ${predictions_augmented.party_id} ;;
     relationship: one_to_many
     type: left_outer
   }

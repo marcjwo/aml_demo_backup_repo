@@ -47,6 +47,7 @@ view: risk_case_event {
     type: count_distinct
     sql: ${risk_case_id} ;;
     filters: [recalls: "Recall"]
+
   }
 
 
@@ -71,12 +72,20 @@ view: risk_case_event {
     drill_fields: [risk_case_id, party_id]
   }
 
+  measure: total_true_positives{
+    type: count_distinct
+    sql: ${risk_case_id} ;;
+    filters: [type: "AML_EXIT"]
+    drill_fields: [risk_case_id, party_id]
+  }
+
   measure: total_false_positives{
     type: count_distinct
     sql: ${risk_case_id} ;;
     filters: [type: "AML_EXIT"]
     drill_fields: [risk_case_id, party_id]
   }
+  ##risk score above the threhold
 
   #dimension: negative_case_flag {}
   measure: total_alerts {
