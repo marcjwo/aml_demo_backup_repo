@@ -1,29 +1,44 @@
 view: predictions_augmented {
   sql_table_name: `finserv-looker-demo.outputs.predictions_augmented` ;;
 
-  dimension: augmented {
-    label: "Risk Score"
+  dimension: augment_party_exit {
     type: number
-    sql: ${TABLE}.augmented ;;
+    sql: ${TABLE}.augment_party_exit ;;
   }
-  dimension: new_risk_label {
-    label: "Risk Label"
+  dimension: augment_risk_label {
     type: string
-    sql: ${TABLE}.new_risk_label ;;
+    sql: ${TABLE}.augment_risk_label ;;
+  }
+  dimension: augmented_risk_score {
+    type: number
+    sql: ${TABLE}.augmented_risk_score ;;
+  }
+  dimension: party_exit {
+    type: number
+    sql: ${TABLE}.party_exit ;;
   }
   dimension: party_id {
-    primary_key: yes
     type: string
     sql: ${TABLE}.party_id ;;
   }
-  dimension: risk_period {
+  dimension: risk_label {
     type: string
+    sql: ${TABLE}.risk_label ;;
+  }
+  dimension_group: risk_period {
+    type: time
+    timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}.risk_period ;;
   }
-  measure: risk_score_measure {
-    label: "Risk Score"
-    type: average                 #### Need to doublecheck here. Just choosing a type of measure to transform it. Depends on the final data structure and the combination with risk_period_end (as in how this is being used) to determine how to measure this best.
-    sql: ${augmented} ;;
-    value_format_name: percent_2
-}
+  dimension: risk_score {
+    type: number
+    sql: ${TABLE}.risk_score ;;
+  }
+  dimension: unknown_flag {
+    type: number
+    sql: ${TABLE}.unknown_flag ;;
+  }
+  measure: count {
+    type: count
+  }
 }
