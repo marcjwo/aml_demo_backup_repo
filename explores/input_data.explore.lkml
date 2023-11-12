@@ -1,5 +1,6 @@
 include: "/views/input_data/*.*"
-include: "/views/input_data/risk_level_mapping.view.lkml"
+
+# include: "/views/input_data/risk_level_mapping.view.lkml"
 
 explore: input_data {
   label: "Input Data"
@@ -12,6 +13,7 @@ explore: input_data {
     --AND ${input_data.validity_start_date} = ${party.validity_start_date}
     ;;
     relationship: one_to_many
+#    relationship: many_to_one
     type: left_outer
   }
 

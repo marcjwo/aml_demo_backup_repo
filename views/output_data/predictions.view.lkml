@@ -1,5 +1,6 @@
 view: predictions {
-  sql_table_name: `finserv-looker-demo.outputs.predictions` ;;
+  # sql_table_name: `finserv-looker-demo.outputs.predictions` ;;
+  sql_table_name: `finserv-looker-demo.outputs.additionally_generated_data` ;;
 
   dimension: party_id {
     primary_key: yes            #### will this work in combination with risk_period_end? Mock data does not indicate, likely to create surrogate key with farm_fingerprint
@@ -25,6 +26,8 @@ view: predictions {
     drill_fields: [party.party_id]
   }
 
+
+
   ### ADDED
 
   measure: risk_score_measure {
@@ -33,4 +36,34 @@ view: predictions {
     sql: ${risk_score} ;;
     value_format_name: percent_2
   }
+
+  # measure: low_risk_score {
+  #   label: "Risk Score"
+  #   sql: ${risk_score} > 25 ;;
+  #   value_format_name: percent_2
+  # }
+
+  ##added for demo
+
+  measure: low_risk_score {
+    type: number
+    label: "Low Risk Score"
+    sql: ${risk_score} > 25 ;;
+    value_format_name: percent_2
+  }
+
+  measure: medium_risk_score {
+    type: number
+    label: "Medium Risk Score"
+    sql: ${risk_score} <- 25 and  ${risk_score} > 50  ;;
+    value_format_name: percent_2
+  }
+
+  measure: high_risk_score {
+    type: number
+    label: "High Risk Score"
+    sql: ${risk_score} < 50  ;;
+    value_format_name: percent_2
+  }
+
 }

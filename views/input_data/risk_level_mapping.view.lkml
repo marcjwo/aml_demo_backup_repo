@@ -65,4 +65,5 @@ view: risk_level_mapping {
       sql: ${TABLE}.risk_level ;;
     }
 
+
   }
