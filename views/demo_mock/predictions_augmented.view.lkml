@@ -38,6 +38,7 @@ view: predictions_augmented {
   }
 
   measure: total_positive_cases{
+    label: "Total New Exits"
     type: count_distinct
     sql: ${party_id};;
     filters: [party_exit_augment: "1"]
@@ -50,6 +51,7 @@ view: predictions_augmented {
     }
 
   measure: total_detected {
+    label: "Total Prev Detected"
     type: count_distinct
     sql: ${party_id};;
     filters: [risk_case_event.type: "AML_EXIT"]
