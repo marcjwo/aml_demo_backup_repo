@@ -14,7 +14,7 @@ view: predictions_augmented {
   }
   dimension: risk_label_augment {
     type: string
-    sql: ${TABLE}.risk_label_augment ;;
+    sql: COALESCE(${TABLE}.risk_label_augment) ;;
   }
   dimension_group: risk_period {
     type: time
