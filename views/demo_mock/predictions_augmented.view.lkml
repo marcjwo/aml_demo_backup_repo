@@ -40,13 +40,13 @@ view: predictions_augmented {
   measure: total_positive_cases{
     type: count_distinct
     sql: ${party_id};;
-    filters: [risk_score_augment: "1"]
+    filters: [party_exit_augment: "1"]
   }
 
   measure: total_false_positives{
     type: sum
     sql: ${party_id};;
-    filters: [risk_score_augment: "1",risk_score_augment: "0" ]
+    filters: [party_exit_augment: "1",party_exit_augment: "0" ]
     }
 
   measure: total_detected {
@@ -75,7 +75,7 @@ view: predictions_augmented {
     hidden: yes
     type: count_distinct
     sql: ${party_id};;
-    filters: [risk_case_event.type: "AML_EXIT", risk_score_augment: "1" ]
+    filters: [risk_case_event.type: "AML_EXIT", party_exit_augment: "1" ]
   }
 
   measure: total_recall {
