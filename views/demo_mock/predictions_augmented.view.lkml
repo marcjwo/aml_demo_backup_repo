@@ -62,6 +62,7 @@ view: predictions_augmented {
     filters: [party_exit_result: "Investigated"]
   }
 
+
   measure: total_not_investigated {
     type: count_distinct
     sql: ${party_id};;

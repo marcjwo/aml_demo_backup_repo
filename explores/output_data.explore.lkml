@@ -33,6 +33,27 @@ explore: output_data {
   #   relationship: one_to_many
   #   type: left_outer
   # }
+  join: transaction {
+    view_label: "Transactions"
+    sql_on: ${output_data.account_id} = ${transaction.account_id}       ;;
+    relationship: one_to_many
+    type: left_outer
+  }
+
+  join: risk_case_event {
+    view_label: "Risk Case Events"
+    sql_on: ${output_data.party_id} = ${risk_case_event.party_id} ;;
+    relationship: one_to_many
+    type: inner
+  }
+
+  join: risk_event_type_mapping {
+    view_label: "Risk Case Events"
+    sql_on: ${risk_case_event.risk_case_id} = ${risk_event_type_mapping.risk_case_id} ;;
+    relationship: many_to_one
+    type: inner
+  }
+
 
   join: predictions_augmented {
     view_label: "Predictions"
