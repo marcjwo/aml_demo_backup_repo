@@ -37,17 +37,18 @@ view: predictions_augmented {
     type: count
   }
 
-  measure: total_positive_cases{
+  measure: total_new_exits{
     label: "Total New Exits"
     type: count_distinct
     sql: ${party_id};;
     filters: [party_exit_augment: "1"]
   }
 
-  measure: total_false_positives{
+  measure: total_investigations {
     type: count_distinct
     sql: ${party_id};;
-    filters: [party_exit_augment: "1",party_exit_augment: "0" ]
+    filters: [party_exit_augment: "1,0"]
+
     }
 
   measure: total_detected {
@@ -57,19 +58,18 @@ view: predictions_augmented {
     filters: [risk_case_event.type: "AML_EXIT"]
   }
 
-
-  measure: total_missed {
-    type: number
-    sql: ${total_detected} - ${total_positive_cases};;
-  }
-  # measure: total_false_positives{
+  # measure: total_missed {
   #   type: number
-  #   sql: ${total_exits} - ${total_investigations} ;;
+  #   sql: ${total_detected} - ${total_new_exits};;
   # }
+  measure: total_false_positives{
+    type: number
+    sql: ${total_investigations} - ${total_new_exits}  ;;
+  }
 
   measure: false_positives_rate{
     type: number
-    sql: ${total_false_positives}/${total_detected} ;;
+    sql: ${total_false_positives}/${total_investigations} ;;
     value_format_name: percent_2
   }
 
