@@ -6,19 +6,6 @@ view: predictions_augmented {
     type: number
     sql: ${TABLE}.party_exit_augment ;;
   }
-  dimension: party_exit_result {
-    case: {
-      when: {
-        sql: ${TABLE}.party_exit_augment = 0 ;;
-        label: "Investigated"
-      }
-      when: {
-        sql: ${TABLE}.party_exit_augment = 1 ;;
-        label: "Exited"
-      }
-      else: "Not Investigated"
-    }
-  }
 
   dimension: party_id {
     primary_key: yes
@@ -50,33 +37,52 @@ view: predictions_augmented {
     type: count
   }
 
-  measure: total_exits {
+  measure: total_positive_cases{
     type: count_distinct
     sql: ${party_id};;
-    filters: [party_exit_result: "Exited"]
+    filters: [risk_score_augment: "1"]
   }
 
-  measure: total_investigations {
-    type: count_distinct
-    sql: ${party_id};;
-    filters: [party_exit_result: "Investigated"]
-  }
-
-
-  measure: total_not_investigated {
-    type: count_distinct
-    sql: ${party_id};;
-    filters: [party_exit_result: "Not Investigated"]
-  }
   measure: total_false_positives{
-    type: number
-    sql: ${total_exits} - ${total_investigations} ;;
+    type: sum
+    sql: ${party_id};;
+    filters: [risk_score_augment: "1",risk_score_augment: "0" ]
+    }
+
+  measure: total_detected {
+    type: count_distinct
+    sql: ${party_id};;
+    filters: [risk_case_event.type: "AML_EXIT"]
   }
+
+
+  measure: total_missed {
+    type: number
+    sql: ${total_detected} - ${total_positive_cases};;
+  }
+  # measure: total_false_positives{
+  #   type: number
+  #   sql: ${total_exits} - ${total_investigations} ;;
+  # }
 
   measure: false_positives_rate{
     type: number
-    sql: ${total_false_positives}/${total_exits} ;;
+    sql: ${total_false_positives}/${total_detected} ;;
     value_format_name: percent_2
+  }
+
+  measure: recall {
+    hidden: yes
+    type: count_distinct
+    sql: ${party_id};;
+    filters: [risk_case_event.type: "AML_EXIT", risk_score_augment: "1" ]
+  }
+
+  measure: total_recall {
+    type: number
+    sql: ${recall}/${total_detected} ;;
+    value_format_name: percent_2
+
   }
 
 
