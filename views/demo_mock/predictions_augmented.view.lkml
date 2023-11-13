@@ -51,8 +51,8 @@ view: predictions_augmented {
 
     }
 
-  measure: total_detected {
-    label: "Total Prev Detected"
+  measure: total_prev_exits {
+    label: "Total Prev Exits"
     type: count_distinct
     sql: ${party_id};;
     filters: [risk_case_event.type: "AML_EXIT"]
@@ -80,9 +80,22 @@ view: predictions_augmented {
     filters: [risk_case_event.type: "AML_EXIT", party_exit_augment: "1" ]
   }
 
+  measure: investigation_rate {
+    type: number
+    sql: ${total_investigations}/${total_parties} ;;
+    value_format_name: percent_2
+  }
+
+  measure: total_performance {
+    type: number
+    sql: ${total_new_exits}/${total_prev_exits} ;;
+    value_format_name: percent_2
+  }
+
+
   measure: total_recall {
     type: number
-    sql: ${recall}/${total_detected} ;;
+    sql: ${recall}/${total_prev_exits} ;;
     value_format_name: percent_2
 
   }
