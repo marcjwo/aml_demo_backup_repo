@@ -31,67 +31,67 @@ view: risk_case_event {
     sql: ${TABLE}.type ;;
   }
 
-  dimension: recalls {
-    hidden: yes
-    case: {
-      when: {
-        sql: ${type} != "AML_EXIT" OR ${type} != "AML_SAR";;
-        label: "Recall"
-      }
-      else: "Other"
-  }
-  }
+#   dimension: recalls {
+#     hidden: yes
+#     case: {
+#       when: {
+#         sql: ${type} != "AML_EXIT" OR ${type} != "AML_SAR";;
+#         label: "Recall"
+#       }
+#       else: "Other"
+#   }
+#   }
 
 
-  measure: total_recalls {
-    type: count_distinct
-    sql: ${risk_case_id} ;;
-    filters: [recalls: "Recall"]
+#   measure: total_recalls {
+#     type: count_distinct
+#     sql: ${risk_case_id} ;;
+#     filters: [recalls: "Recall"]
 
-  }
+#   }
 
 
-  measure: total_investigations_started {
-    type: count_distinct
-    sql: ${risk_case_id} ;;
-    filters: [type: "AML_PROCESS_START"]
-    drill_fields: [risk_case_id, party_id]
-  }
+#   measure: total_investigations_started {
+#     type: count_distinct
+#     sql: ${risk_case_id} ;;
+#     filters: [type: "AML_PROCESS_START"]
+#     drill_fields: [risk_case_id, party_id]
+#   }
 
-  measure: total_investigations_completed {
-    type: count_distinct
-    sql: ${risk_case_id} ;;
-    filters: [type: "AML_PROCESS_START"]
-    drill_fields: [risk_case_id, party_id]
-  }
+#   measure: total_investigations_completed {
+#     type: count_distinct
+#     sql: ${risk_case_id} ;;
+#     filters: [type: "AML_PROCESS_START"]
+#     drill_fields: [risk_case_id, party_id]
+#   }
 
-  measure: total_sars_filed {
-    type: count_distinct
-    sql: ${risk_case_id} ;;
-    filters: [type: "AML_SAR"]
-    drill_fields: [risk_case_id, party_id]
-  }
+#   measure: total_sars_filed {
+#     type: count_distinct
+#     sql: ${risk_case_id} ;;
+#     filters: [type: "AML_SAR"]
+#     drill_fields: [risk_case_id, party_id]
+#   }
 
-  measure: total_true_positives{
-    type: count_distinct
-    sql: ${risk_case_id} ;;
-    filters: [type: "AML_EXIT"]
-    drill_fields: [risk_case_id, party_id]
-  }
+#   measure: total_true_positives{
+#     type: count_distinct
+#     sql: ${risk_case_id} ;;
+#     filters: [type: "AML_EXIT"]
+#     drill_fields: [risk_case_id, party_id]
+#   }
 
-  measure: total_false_positives{
-    type: count_distinct
-    sql: ${risk_case_id} ;;
-    filters: [type: "AML_EXIT"]
-    drill_fields: [risk_case_id, party_id]
-  }
-  ##risk score above the threhold
+#   measure: total_false_positives{
+#     type: count_distinct
+#     sql: ${risk_case_id} ;;
+#     filters: [type: "AML_EXIT"]
+#     drill_fields: [risk_case_id, party_id]
+#   }
+#   ##risk score above the threhold
 
-  #dimension: negative_case_flag {}
-  measure: total_alerts {
-    type: count_distinct
-    sql: ${risk_case_id} ;;
-    drill_fields: [risk_case_id, party_id]
-  }
+#   #dimension: negative_case_flag {}
+#   measure: total_alerts {
+#     type: count_distinct
+#     sql: ${risk_case_id} ;;
+#     drill_fields: [risk_case_id, party_id]
+#   }
 
-}
+ }

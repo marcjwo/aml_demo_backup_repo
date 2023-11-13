@@ -14,7 +14,7 @@ view: predictions_augmented {
   }
   dimension: risk_label_augment {
     type: string
-    sql: COALESCE(${TABLE}.risk_label_augment) ;;
+    sql: cast(${TABLE}.risk_label_augment as string) ;;
   }
   dimension_group: risk_period {
     type: time
@@ -30,7 +30,7 @@ view: predictions_augmented {
   dimension: risk_score_augment {
     type: number
     sql: ${TABLE}.risk_score_augment ;;
-    value_format_name: percent_2
+ #   value_format_name: percent_2
   }
 
   measure: total_parties {
