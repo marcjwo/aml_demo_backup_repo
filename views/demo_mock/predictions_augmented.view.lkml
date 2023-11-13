@@ -30,7 +30,7 @@ view: predictions_augmented {
   dimension: risk_score_augment {
     type: number
     sql: ${TABLE}.risk_score_augment ;;
- #   value_format_name: percent_2
+    value_format_name: percent_2
   }
 
   measure: total_parties {
@@ -44,7 +44,7 @@ view: predictions_augmented {
   }
 
   measure: total_false_positives{
-    type: sum
+    type: count_distinct
     sql: ${party_id};;
     filters: [party_exit_augment: "1",party_exit_augment: "0" ]
     }
