@@ -9,9 +9,7 @@ explore: output_data {
 
   join: party {
     view_label: "Party: Base Table"
-    sql_on: ${output_data.party_id} = ${party.party_id}
-          --AND ${output_data.validity_start_date} = ${party.validity_start_date}
-          ;;
+    sql_on: ${output_data.party_id} = ${party.party_id};;
     relationship: one_to_many
     type: left_outer
   }
