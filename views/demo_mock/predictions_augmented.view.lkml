@@ -75,7 +75,7 @@ view: predictions_augmented {
   }
 
   measure: recall {
-    hidden: yes
+#    hidden: yes
     type: count_distinct
     sql: ${party_id};;
     filters: [risk_case_event.type: "AML_EXIT", party_exit_augment: "1" ]
