@@ -13,6 +13,7 @@ view: predictions_augmented {
     sql: ${TABLE}.party_id ;;
   }
   dimension: risk_label_augment {
+    label: "Risk Label"
     type: string
     sql: cast(${TABLE}.risk_label_augment as string) ;;
   }
