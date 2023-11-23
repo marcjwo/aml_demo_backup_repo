@@ -98,6 +98,12 @@ view: predictions_augmented {
   #   sql:  ;;
   # }
 
+  measure: average_risk_score {
+    type: average
+    sql: ${risk_score_augment} ;;
+    value_format_name: percent_2
+  }
+
 
   measure: total_recall {
     type: number
