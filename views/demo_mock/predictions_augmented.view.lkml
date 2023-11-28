@@ -34,8 +34,17 @@ view: predictions_augmented {
     value_format_name: percent_2
   }
 
+## Measures ##
+
+  measure: longitudinal_avg_risk_score {
+    type: average
+    sql: ${risk_score_augment} ;;
+  }
+
+
   measure: total_parties {
-    type: count
+    type: count_distinct
+    sql: ${party_id} ;;
   }
 
   measure: total_new_exits{
@@ -45,7 +54,7 @@ view: predictions_augmented {
     filters: [party_exit_augment: "1"]
   }
 
-  measure: total_investigations {
+  measure: total_investigations { ## this needs to be dynamic
     type: count_distinct
     sql: ${party_id};;
     filters: [party_exit_augment: "1,0"]
@@ -64,13 +73,15 @@ view: predictions_augmented {
   #   sql: ${total_detected} - ${total_new_exits};;
   # }
   measure: total_false_positives{
-    type: number
-    sql: ${total_investigations} - ${total_new_exits}  ;;
+    type: count_distinct
+    sql: ${party_id};;
+    filters: [party_exit_augment: "1"]
+
   }
 
   measure: false_positives_rate{
     type: number
-    sql: ${total_false_positives}/${total_investigations} ;;
+    sql: ${total_investigations}/(${total_investigations}+${total_new_exits}) ;;
     value_format_name: percent_2
   }
 
@@ -88,6 +99,7 @@ view: predictions_augmented {
   }
 
   measure: total_performance {
+    label: "Total Performance Rate"
     type: number
     sql: ${total_new_exits}/${total_prev_exits} ;;
     value_format_name: percent_2
@@ -105,11 +117,11 @@ view: predictions_augmented {
   }
 
 
+
   measure: total_recall {
     type: number
     sql: ${recall}/${total_prev_exits} ;;
     value_format_name: percent_2
-
   }
 
 
