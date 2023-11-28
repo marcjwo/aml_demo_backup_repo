@@ -75,10 +75,22 @@ view: transaction {
   }
   measure: count {
     type: count
-    drill_fields: [transaction_id]
+    drill_fields: [transaction_id, direction, type, account_id, counterparty_account__account_id, normalized_booked_amount__currency_code, normalized_booked_amount__nanos, normalized_booked_amount__units, book_date, validity_start_date ]
   }
 
+  measure: average_transaction_value {
+    type: average
+    sql: ${normalized_booked_amount__units} ;;
+  }
+
+
   ####
+
+
+  measure: total_number_of_counterparty {
+    type: count_distinct
+    sql: ${counterparty_account__account_id} ;;
+  }
 
   dimension: direction_helper {
     type: number
@@ -88,6 +100,11 @@ view: transaction {
   measure: direction_measure {
     type: sum
     sql: ${direction_helper} ;;
+  }
+
+  measure: total_transaction_value {
+    type: sum
+    sql: ${normalized_booked_amount__units} ;;
   }
 
 

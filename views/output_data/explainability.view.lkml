@@ -1,9 +1,9 @@
 # Un-hide and use this explore, or copy the joins into another explore, to get all the fully nested relationships from this view
-# explore: explainability_old {
+# explore: explainability {
 #   hidden: no
 #     join: explainability__attributions {
 #       view_label: "Explainability: Attributions"
-#       sql: LEFT JOIN UNNEST(${explainability_old.attributions}) as explainability__attributions ;;
+#       sql: LEFT JOIN UNNEST(${explainability.attributions}) as explainability__attributions ;;
 #       relationship: one_to_many
 #     }
 # }
@@ -33,6 +33,7 @@ view: explainability {
 }
 
 view: explainability__attributions {
+  view_label: "Explainability"
 
   dimension: attribution {
     type: number
@@ -40,7 +41,7 @@ view: explainability__attributions {
   }
   dimension: explainability__attributions {
     type: string
-    hidden: no
+    hidden: yes
     sql: explainability__attributions ;;
   }
   dimension: feature_family {
