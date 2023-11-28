@@ -43,7 +43,7 @@ view: predictions {
   #   value_format_name: percent_2
   # }
 
-  ##added for demo
+  ##added for demo -- needs to be dynamic
 
   measure: low_risk_score {
     type: number
