@@ -31,6 +31,11 @@ view: risk_case_event {
     sql: ${TABLE}.type ;;
   }
 
+  measure: total_risk_cases {
+    type: count_distinct
+    sql: ${risk_case_id} ;;
+  }
+
 #   dimension: recalls {
 #     hidden: yes
 #     case: {
