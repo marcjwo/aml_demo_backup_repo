@@ -124,5 +124,16 @@ view: predictions_augmented {
     value_format_name: percent_2
   }
 
+  parameter: risk_score_threshold {
+    type: number
+  }
+
+  dimension: risk_score_threshold_help_dimension {
+    type: yesno
+    hidden: no
+    sql: ${risk_score_augment} >= ({% parameter risk_score_threshold %}/100)  ;;
+
+  }
+
 
 }
