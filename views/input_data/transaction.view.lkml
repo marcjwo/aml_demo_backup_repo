@@ -78,6 +78,7 @@ view: transaction {
     drill_fields: [transaction_id, direction, type, account_id, counterparty_account__account_id, normalized_booked_amount__currency_code, normalized_booked_amount__nanos, normalized_booked_amount__units, book_date, validity_start_date ]
   }
 
+
   measure: average_transaction_value {
     type: average
     sql: ${normalized_booked_amount__units} ;;
@@ -109,4 +110,54 @@ view: transaction {
 
 
   ####
+}
+
+view: time_between_transactions {
+  derived_table: {
+    sql:
+      with data as (
+      select t.account_id, book_time, date_diff((lead(book_time) over(partition by t.account_id order by book_time)), book_time, minute) as difference from `finserv-looker-demo.public_dataset.transaction` as t
+      group by account_id, book_time),
+      data1 as (select account_id, count(*) as total from `finserv-looker-demo.public_dataset.transaction` group by account_id)
+      select
+      data.account_id as account_id,
+      total as total_transactions,
+      sum(difference) as total_time_difference,
+      round(avg(difference),0) as average_time_difference
+      from data, data1
+      where data.account_id = data1.account_id
+      group by data.account_id, data1.total
+    ;;
+  }
+
+  dimension: account_id {
+    type: string
+    description: "MANDATORY: Account ID of the Account in the Account Party Link table."
+    sql: ${TABLE}.account_id ;;
+  }
+
+  dimension: total_transactions {
+    label: "Total Number of Transactions"
+    type: number
+    sql: ${TABLE}.total_transactions ;;
+  }
+
+  dimension: total_time_difference {
+    label: "Total time difference between Transactions"
+    type: number
+    sql: ${TABLE}.total_time_difference ;;
+  }
+
+  dimension: average_time_difference {
+    label: "Average time difference between Transactions"
+    type: number
+    sql: ${TABLE}.average_time_difference ;;
+  }
+
+  measure: count {
+    type: count
+    drill_fields: [account_id, total_transactions]
+  }
+
+
 }
