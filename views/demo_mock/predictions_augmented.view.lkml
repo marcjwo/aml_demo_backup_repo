@@ -130,8 +130,15 @@ view: predictions_augmented {
 
   dimension: risk_score_threshold_help_dimension {
     type: yesno
-    hidden: no
+    hidden: yes
     sql: ${risk_score_augment} >= ({% parameter risk_score_threshold %}/100)  ;;
+
+  }
+
+  measure: total_investigations_v1 { ## this needs to be dynamic
+    type: count_distinct
+    sql: ${party_id};;
+    filters: [party_exit_augment: "1,0", risk_score_threshold_help_dimension: "Yes"]
 
   }
 
