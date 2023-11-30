@@ -135,11 +135,18 @@ view: predictions_augmented {
 
   }
 
-  measure: total_investigations_v1 { ## this needs to be dynamic
+  measure: total_investigations_dynamic { ## this needs to be dynamic
     type: count_distinct
     sql: ${party_id};;
-    filters: [party_exit_augment: "1,0", risk_score_threshold_help_dimension: "Yes"]
+    filters: [risk_score_threshold_help_dimension: "Yes"]
 
+  }
+
+  measure: recall_dynamic {
+#    hidden: yes
+    type: count_distinct
+    sql: ${party_id};;
+    filters: [risk_case_event.type: "AML_EXIT", party_exit_augment: "1", risk_score_threshold_help_dimension: "Yes"]
   }
 
 
