@@ -103,6 +103,8 @@ view: transaction {
   }
 
   measure: total_transaction_value {
+    label: "AML AI: Total Transaction Value"
+    description: "Show total value of transactions per individual"
     type: sum
     sql: ${normalized_booked_amount__units} ;;
   }

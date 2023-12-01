@@ -42,7 +42,7 @@ explore: output_data {
     view_label: "Risk Case Events"
     sql_on: ${output_data.party_id} = ${risk_case_event.party_id} ;;
     relationship: one_to_many
-    type: left_outer
+    type: full_outer
   }
 
   join: risk_event_type_mapping {

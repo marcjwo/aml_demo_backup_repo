@@ -1,5 +1,10 @@
 view: risk_case_event {
-  sql_table_name: `finserv-looker-demo.public_dataset.risk_case_event` ;;
+  # sql_table_name: `finserv-looker-demo.public_dataset.risk_case_event` ;;
+    derived_table: {
+    sql: SELECT a.*, (CASE WHEN b.party_id is NULL then "Yes" else "No" end) as prev_false_positive FROM `finserv-looker-demo.public_dataset.risk_case_event` a
+LEFT JOIN (
+SELECT distinct party_id FROM `finserv-looker-demo.public_dataset.risk_case_event` WHERE type = "AML_EXIT") b ON a.party_id = b.party_id ;;
+  }
   drill_fields: [risk_case_event_id]
 
   dimension: risk_case_event_id {
@@ -98,5 +103,11 @@ view: risk_case_event {
 #     sql: ${risk_case_id} ;;
 #     drill_fields: [risk_case_id, party_id]
 #   }
+
+
+  dimension: prev_false_positive {
+    hidden: yes
+    sql: ${TABLE}.prev_false_positive  ;;
+  }
 
  }
