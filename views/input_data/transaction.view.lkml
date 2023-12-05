@@ -1,3 +1,7 @@
+#this file contains 2 views
+#1. transaction
+#2. time_between_transactions
+
 view: transaction {
   sql_table_name: `finserv-looker-demo.public_dataset.transaction` ;;
   drill_fields: [transaction_id]
