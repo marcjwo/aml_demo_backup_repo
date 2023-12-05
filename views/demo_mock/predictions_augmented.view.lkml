@@ -44,7 +44,7 @@ view: predictions_augmented {
 
   dimension: risk_score_threshold_help_dimension {
     type: yesno
-    hidden: yes
+    hidden: no
     sql: ${risk_score_augment} >= ({% parameter risk_score_threshold %}/100)  ;;
 
   }
