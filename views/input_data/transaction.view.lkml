@@ -108,8 +108,11 @@ view: transaction {
   }
 
   measure: total_transaction_value {
+    label: "AML AI: Total Transaction Value"
+    description: "Show total value of transactions per individual"
     type: sum
     sql: ${normalized_booked_amount__units} ;;
+    drill_fields: [transaction_id, direction, type, account_id, counterparty_account__account_id, normalized_booked_amount__currency_code, normalized_booked_amount__nanos, normalized_booked_amount__units, book_date, validity_start_date ]
   }
 
 
