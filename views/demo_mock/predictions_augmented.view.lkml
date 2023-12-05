@@ -245,6 +245,7 @@ view: predictions_augmented {
 
 
   measure: average_risk_score {
+    label: "Risk Score"
     type: average
     sql: ${risk_score_augment} ;;
     value_format_name: percent_2
