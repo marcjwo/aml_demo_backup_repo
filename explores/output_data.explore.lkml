@@ -57,7 +57,7 @@ explore: output_data {
     view_label: "Risk Case Events"
     sql_on: ${risk_case_event.risk_case_id} = ${risk_event_type_mapping.risk_case_id} ;;
     relationship: many_to_one
-    type: inner
+    type: full_outer ## amended this join to show the right amount of recalls with the card on dashboard 3
   }
 
 
