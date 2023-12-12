@@ -1,5 +1,5 @@
 view: account_party_link {
-  sql_table_name: `finserv-looker-demo.public_dataset.account_party_link` ;;
+  sql_table_name: `finserv-looker-demo.@{input_dataset}.account_party_link` ;;
 
   dimension: account_id {
     primary_key: yes

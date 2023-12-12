@@ -3,7 +3,7 @@
 #2. time_between_transactions
 
 view: transaction {
-  sql_table_name: `finserv-looker-demo.public_dataset.transaction` ;;
+  sql_table_name: `finserv-looker-demo.@{input_dataset}.transaction` ;;
   drill_fields: [transaction_id]
 
   dimension: transaction_id {
@@ -123,9 +123,9 @@ view: time_between_transactions {
   derived_table: {
     sql:
       with data as (
-      select t.account_id, book_time, date_diff((lead(book_time) over(partition by t.account_id order by book_time)), book_time, minute) as difference from `finserv-looker-demo.public_dataset.transaction` as t
+      select t.account_id, book_time, date_diff((lead(book_time) over(partition by t.account_id order by book_time)), book_time, minute) as difference from `finserv-looker-demo.@{input_dataset}.transaction` as t
       group by account_id, book_time),
-      data1 as (select account_id, count(*) as total from `finserv-looker-demo.public_dataset.transaction` group by account_id)
+      data1 as (select account_id, count(*) as total from `finserv-looker-demo.@{input_dataset}.transaction` group by account_id)
       select
       data.account_id as account_id,
       total as total_transactions,

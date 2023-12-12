@@ -1,5 +1,5 @@
 view: party_registration {
-  sql_table_name: `finserv-looker-demo.public_dataset.party_registration` ;;
+  sql_table_name: `finserv-looker-demo.@{input_dataset}.party_registration` ;;
 
   dimension: party_id {
     type: string

@@ -1,6 +1,6 @@
 view: predictions {
-  # sql_table_name: `finserv-looker-demo.outputs.predictions` ;;
-  sql_table_name: `finserv-looker-demo.outputs.additionally_generated_data` ;;
+  # sql_table_name: `finserv-looker-demo.@{output_dataset}.predictions` ;;
+  sql_table_name: `finserv-looker-demo.@{output_dataset}.additionally_generated_data` ;;
 
   dimension: party_id {
     primary_key: yes            #### will this work in combination with risk_period_end? Mock data does not indicate, likely to create surrogate key with farm_fingerprint

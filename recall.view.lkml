@@ -4,14 +4,14 @@ view: recall {
     sql: WITH positives AS (
         SELECT DISTINCT  # in case there is more than one exit per party
           party_id
-        FROM `finserv-looker-demo.public_dataset.risk_case_event`
+        FROM `finserv-looker-demo.@{input_dataset}.risk_case_event`
         WHERE type = 'AML_EXIT'
       ),
       
       alerts AS (
         SELECT DISTINCT  # in case there is more than one alert per party
           party_id
-        FROM `finserv-looker-demo.outputs.predictions`
+        FROM `finserv-looker-demo.@{output_dataset}.predictions`
         WHERE risk_score > 0.5
       ),
       

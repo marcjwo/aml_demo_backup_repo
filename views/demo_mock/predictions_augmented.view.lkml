@@ -1,5 +1,5 @@
 view: predictions_augmented {
-  sql_table_name: `finserv-looker-demo.outputs.predictions_augmented` ;;
+  sql_table_name: `finserv-looker-demo.@{output_dataset}.predictions_augmented` ;;
 
 
 

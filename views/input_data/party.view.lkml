@@ -13,7 +13,7 @@ explore: party {
     }
 }
 view: party {
-  sql_table_name: `finserv-looker-demo.public_dataset.party` ;;
+  sql_table_name: `finserv-looker-demo.@{input_dataset}.party` ;;
   drill_fields: [party_id]
 
   dimension: party_id {

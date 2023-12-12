@@ -1,7 +1,7 @@
 explore: risk_event_type_evaluation {}
 
 view: risk_event_type_evaluation {
-  sql_table_name: `finserv-looker-demo.public_dataset.risk_event_type_evaluation` ;;
+  sql_table_name: `finserv-looker-demo.@{input_dataset}.risk_event_type_evaluation` ;;
 
   dimension: legacy_confirmed {
     type: string

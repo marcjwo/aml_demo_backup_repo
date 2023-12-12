@@ -8,7 +8,7 @@
 #     }
 # }
 view: explainability {
-  sql_table_name: `finserv-looker-demo.outputs.explainability` ;;
+  sql_table_name: `finserv-looker-demo.@{output_dataset}.explainability` ;;
 
   dimension: attributions {
     hidden: yes

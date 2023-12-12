@@ -1,5 +1,5 @@
 view: risk_event_type_mapping {
-  sql_table_name: `finserv-looker-demo.public_dataset.risk_event_type_mapping` ;;
+  sql_table_name: `finserv-looker-demo.@{input_dataset}.risk_event_type_mapping` ;;
 
   dimension: risk_case_id {
     type: string
