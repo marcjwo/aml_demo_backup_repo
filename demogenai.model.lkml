@@ -1,6 +1,6 @@
-connection: "looker-private-demo"
+connection: "finserv-bq-connection-looker"
 
- include: "/views/*/*.view.lkml"                # include all views in the views/ folder in this project
+include: "/views/*/*.view.lkml"                # include all views in the views/ folder in this project
 
 include: "/explores/input_data.explore.lkml"
 
