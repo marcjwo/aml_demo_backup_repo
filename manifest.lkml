@@ -5,11 +5,11 @@ project_name: "demo_aml_ai"
 
 
 constant: input_dataset {
-  value: "public_dataset" ## old dataset
-  # value: "Input_New" ## new dataset
+  # value: "public_dataset" ## old dataset
+  value: "Input_New" ## new dataset
 }
 
 constant: output_dataset {
-  value: "outputs" ## old dataset
-  # value: "Output_new" ## new dataset
+  # value: "outputs" ## old dataset
+  value: "Output_new" ## new dataset
 }
