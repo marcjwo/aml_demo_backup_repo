@@ -13,3 +13,8 @@ constant: output_dataset {
   # value: "outputs" ## old dataset
   value: "Output_new" ## new dataset
 }
+
+# remote_dependency: gauge {
+#   url: "https://github.com/looker-open-source/viz-gauge-marketplace.git"
+#   ref: "master"
+# }
