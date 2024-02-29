@@ -44,6 +44,15 @@ view: skew {
     sql: ${threshold} ;;
   }
 
+  parameter: skew_threshold {
+    type: unquoted
+  }
+
+  dimension: skew_relevant {
+    type: yesno
+    sql: ${skew} > {% parameter skew_threshold %};;
+  }
+
   set: detail {
     fields: [
       feature_family,
