@@ -64,7 +64,7 @@ view: evaluation {
         a.label_id=c.label_id ;;
   }
 
-  ### additions
+  ### additions   ###   ###   ###   ###   ### ###   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ###
 
   parameter: threshold {
     type: unquoted
@@ -74,6 +74,7 @@ view: evaluation {
     type: yesno
     sql: ${risk_score} > {% parameter threshold %} ;;
   }
+
 
   dimension: classification {
     type: string
@@ -90,21 +91,43 @@ view: evaluation {
     ;;
   }
 
+  dimension: aml_ai_ind {
+    type: string
+    sql:
+    CASE
+      WHEN ${classification} IN ('True positive', 'True Positive - Not in Rule') THEN 'True positive'
+      WHEN ${classification} IN ('False positive') THEN 'False positive'
+    END
+    ;;
+  }
+
   dimension: net_new_indicator {
     sql: CASE
           WHEN ${classification} IN ("True positive","False positive") THEN "Overlap"
           WHEN ${classification} IN ('True Positive - Not in Rule') THEN "Net New AML AI"
-          WHEN ${classification} IN ("True negative","False negative", 'Present in rule based only') THEN "Net New Rule based"
+          WHEN ${classification} IN ("False negative") THEN "Net New Rule based"
           END
           ;;
   }
+
+  # dimension: net_new_indicator_ {
+  #   type: string
+  #   sql:
+  #   CASE
+  #     WHEN ${ai_aml} AND ${rule_based} = 'True positive' then 'Overlap'
+  #     WHEN ${ai_aml} AND ${rule_based} = 'False positive' then 'AML AI Net New'
+  #     WHEN NOT ${ai_aml} and ${rule_based} = 'True positive' then 'Rule based Net New'
+  #     WHEN NOT ${ai_aml} and ${rule_based} is NULL then 'AML AI Net New'
+  #   END
+  #   ;;
+  # }
 
   measure: party_count {
     type: count_distinct
     sql: ${party_id} ;;
   }
 
-  ###
+  ### ###   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ###
 
   measure: count {
     type: count
