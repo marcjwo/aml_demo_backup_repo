@@ -23,7 +23,7 @@ explore: flat_evalution {
 
 view: evaluation {
   derived_table: {
-    persist_for: "72 hours"
+    persist_for: "168 hours"
     sql: SELECT
         a.* EXCEPT (label_id),
         c.risk_label,
@@ -63,7 +63,13 @@ view: evaluation {
           'label_17'
         END
           AS label_id
-      FROM `finserv-looker-demo.output_v3.predictions` a
+      FROM
+      (
+        SELECT * FROM `finserv-looker-demo.output_v3.predictions` WHERE RAND() <= 0.2
+      ) a
+      --(
+      --SELECT * FROM `finserv-looker-demo.output_v3.predictions` TABLESAMPLE SYSTEM (5 PERCENT)
+      --) a
       FULL OUTER JOIN (
       SELECT * EXCEPT(rn)
       FROM(

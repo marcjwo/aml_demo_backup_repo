@@ -49,7 +49,7 @@ view: party {
   dimension: gender {
     type: string
     description: "RECOMMENDED: Gender string for individuals. Typically used for fairness evaluation."
-    sql: ${TABLE}.gender ;;
+    sql: CASE WHEN ${TABLE}.gender = 'F' THEN 'Female' WHEN ${TABLE}.gender = 'M' THEN 'Male' else 'N/A' END;;
   }
   dimension: is_entity_deleted {
     type: yesno
@@ -92,6 +92,32 @@ view: party {
     type: count
     drill_fields: [party_id]
   }
+
+  dimension: first_name {
+    type: string
+    sql: "Jane" ;;
+  }
+
+  dimension: last_name {
+    type: string
+    sql: "Doe" ;;
+  }
+
+  dimension: name {
+    type: string
+    sql:
+    CASE WHEN ${type} = 'CONSUMER' THEN CONCAT(${first_name},${last_name})
+    WHEN ${type} = 'COMPANY' THEN 'Alphabet Inc'
+    END
+    ;;
+  }
+
+  dimension: risk_score {
+    type: number
+    value_format_name: percent_2
+    sql: RAND();;
+  }
+
 }
 
 view: party__residencies {

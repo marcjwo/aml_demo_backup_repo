@@ -83,4 +83,22 @@ FROM `finserv-looker-demo.output_v3.prediction-results-metadata`,
     value_format_name: decimal_2
     sql: ${missingness_value} ;;
   }
+
+  parameter: highlight_threshold {
+    type: number
+    default_value: "0.05"
+  }
+
+  measure: sum_missingness_value_highlighted {
+    type: sum
+    value_format_name: decimal_2
+    sql: ${missingness_value} ;;
+    html:
+    {% if value >= highlight_threshold._parameter_value %}
+    <p>🛎️ {{ value| round: 2 }}</p>
+    {% else %}
+    {{ value | round: 2 }}
+    {% endif %}
+    ;;
+  }
 }
