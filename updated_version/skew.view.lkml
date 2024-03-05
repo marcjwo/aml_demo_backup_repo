@@ -19,7 +19,7 @@ view: skew {
 
   dimension: feature_family {
     type: string
-    sql: ${TABLE}.feature_family ;;
+    sql: UPPER(SUBSTR(REPLACE(${TABLE}.feature_family,'_',' '),1,1))||SUBSTR(REPLACE(${TABLE}.feature_family,'_',' '),2) ;;
   }
 
   dimension: skew {

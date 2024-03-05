@@ -33,7 +33,7 @@ view: model_performance_mock {
 
   measure: _model_performance {
     type: average
-    value_format_name: percent_2
+    value_format_name: percent_0
     sql: ${model_performance} ;;
   }
 
@@ -43,7 +43,7 @@ view: model_performance_mock {
 
   measure: _model_threshold {
     type: average
-    value_format_name: percent_2
+    value_format_name: percent_0
     sql: {% parameter model_threshold %} ;;
   }
 
