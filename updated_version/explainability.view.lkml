@@ -46,6 +46,6 @@ view: explainability__attributions {
   measure: _attribution {
     type: average
     sql: ${attribution} ;;
-    # value_format_name: decimal_4
+    value_format_name: decimal_2
   }
 }

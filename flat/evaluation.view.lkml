@@ -64,12 +64,22 @@ view: evaluation {
         END
           AS label_id
       FROM
-      (
-        SELECT * FROM `finserv-looker-demo.output_v3.predictions` WHERE RAND() <= 0.2
-      ) a
+      --(
+      --  SELECT * FROM `finserv-looker-demo.output_v3.predictions` WHERE RAND() <= 0.2
+      --) a
       --(
       --SELECT * FROM `finserv-looker-demo.output_v3.predictions` TABLESAMPLE SYSTEM (5 PERCENT)
       --) a
+      (
+      SELECT
+      *
+      FROM `finserv-looker-demo.output_v3.predictions`
+      WHERE party_id IN (SELECt distinct party_id FROM `finserv-looker-demo.input_v3.risk_case_event`) UNION ALL
+      SELECT
+      *
+      FROM`finserv-looker-demo.output_v3.predictions`
+      WHERE party_id NOT IN (SELECT distinct party_id FROM `finserv-looker-demo.input_v3.risk_case_event`) AND RAND() <= 0.2
+      ) a
       FULL OUTER JOIN (
       SELECT * EXCEPT(rn)
       FROM(
@@ -95,9 +105,13 @@ view: evaluation {
     type: unquoted
   }
 
+  parameter: threshold_2 {
+    type: number
+  }
+
   dimension: ai_aml {
     type: yesno
-    sql: ${risk_score} > {% parameter threshold %} ;;
+    sql: (${risk_score}*100) > {% parameter threshold %} ;;
   }
 
 
@@ -150,6 +164,10 @@ view: evaluation {
   measure: party_count {
     type: count_distinct
     sql: ${party_id} ;;
+  }
+
+  measure: slider {
+    type: number
   }
 
   ### ###   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ###
