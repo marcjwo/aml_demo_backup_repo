@@ -112,11 +112,11 @@ view: party {
     ;;
   }
 
-  dimension: risk_score {
-    type: number
-    value_format_name: percent_2
-    sql: RAND();;
-  }
+  # dimension: risk_score {
+  #   type: number
+  #   value_format_name: percent_2
+  #   sql: RAND();;
+  # }
 
 }
 

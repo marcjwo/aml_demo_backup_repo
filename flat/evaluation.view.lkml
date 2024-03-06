@@ -59,8 +59,7 @@ view: evaluation {
             WHEN MOD(ROW_NUMBER() OVER (), 47) = 0 THEN 'label_14'
             WHEN MOD(ROW_NUMBER() OVER (), 53) = 0 THEN 'label_15'
             WHEN MOD(ROW_NUMBER() OVER (), 56) = 0 THEN 'label_16'
-          ELSE
-          'label_17'
+            ELSE 'label_17'
         END
           AS label_id
       FROM
@@ -105,9 +104,48 @@ view: evaluation {
     type: unquoted
   }
 
-  dimension: ai_aml {
+  dimension: aml_ai {
     type: yesno
-    sql: (${risk_score}*100) > {% parameter threshold %} ;;
+    sql: (${risk_score}*100) > {% parameter threshold %};;
+  }
+
+  parameter: threshold_fp {
+    type: unquoted
+  }
+
+  dimension: aml_ai_fp_ind {
+    type: string
+    sql:
+    CASE
+      WHEN ${aml_ai} = true and (RAND()*100) <= {% parameter threshold_fp %} THEN 'True positive'
+      WHEN ${aml_ai} = true and (RAND()*100) > {% parameter threshold_fp %} THEN 'False positive'
+    END
+    ;;
+  }
+
+  # dimension: net_new_indicator_ {
+  #   type: string
+  #   sql:
+  #   CASE
+  #     WHEN ${ai_aml_fp_ind} = 'True positive' AND ${rule_based} = 'True positive' then 'Overlap'
+  #     WHEN ${ai_aml_fp_ind} = 'True positive' AND ${rule_based} = 'False positive' then 'AML AI Net New'
+  #     WHEN ${ai_aml_fp_ind} = 'False positive' and ${rule_based} = 'True positive' then 'Rule based Net New'
+  #     WHEN ${ai_aml_fp_ind} = 'True positive' and ${rule_based} is NULL then 'AML AI Net New'
+  #   END
+  #   ;;
+  # }
+
+  dimension: net_new_indicator {
+    type: string
+    sql:
+    CASE
+      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} IS NULL then '2_Rule based exit'
+      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = 'False positive' then '2_Rule based exit'
+      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = 'True positive' then '1_Detected'
+      WHEN ${rule_based} = 'False positive' AND ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
+      WHEN ${rule_based} IS NULL AND ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
+    END
+    ;;
   }
 
 
@@ -115,13 +153,13 @@ view: evaluation {
     type: string
     sql: CASE
 
-          WHEN ${ai_aml} = true AND ${rule_based} = 'True positive' THEN "True positive"
-          WHEN ${ai_aml} = true AND ${rule_based} = 'False positive' THEN "False positive"
-          WHEN ${ai_aml} = false AND ${rule_based} = 'False positive' THEN "True negative"
-          WHEN ${ai_aml} = false AND ${rule_based} = 'True positive' THEN "False negative"
+          WHEN ${aml_ai} = true AND ${rule_based} = 'True positive' THEN "True positive"
+          WHEN ${aml_ai} = true AND ${rule_based} = 'False positive' THEN "False positive"
+          WHEN ${aml_ai} = false AND ${rule_based} = 'False positive' THEN "True negative"
+          WHEN ${aml_ai} = false AND ${rule_based} = 'True positive' THEN "False negative"
           WHEN ${indicator} = 'Present in rule based only' THEN "Out of Scope AML AI"
-          WHEN ${ai_aml} = true AND ${rule_based} IS NULL THEN 'True Positive - Not in Rule'
-          WHEN ${ai_aml} = false AND ${rule_based} IS NULL THEN 'True negative - Not in Rule'
+          WHEN ${aml_ai} = true AND ${rule_based} IS NULL THEN 'True Positive - Not in Rule'
+          WHEN ${aml_ai} = false AND ${rule_based} IS NULL THEN 'True negative - Not in Rule'
         END
     ;;
   }
@@ -136,40 +174,20 @@ view: evaluation {
   #   ;;
   # }
 
-  parameter: threshold_fp {
-    type: unquoted
-  }
 
-  dimension: aml_ai_ind {
-    type: string
-    sql:
-    CASE
-      WHEN ${ai_aml} = true and RAND() <= {% parameter threshold_fp %}/100 THEN 'True positive'
-      WHEN ${ai_aml} = true and RAND() > {% parameter threshold_fp %}/100 THEN 'False positive'
-    END
-    ;;
-  }
 
-  dimension: net_new_indicator {
-    sql: CASE
-          WHEN ${classification} IN ("True positive","False positive") THEN "Overlap"
-          WHEN ${classification} IN ('True Positive - Not in Rule') THEN "Net New AML AI"
-          WHEN ${classification} IN ("False negative") THEN "Net New Rule based"
-          END
-          ;;
-  }
 
-  # dimension: net_new_indicator_ {
-  #   type: string
-  #   sql:
-  #   CASE
-  #     WHEN ${ai_aml} AND ${rule_based} = 'True positive' then 'Overlap'
-  #     WHEN ${ai_aml} AND ${rule_based} = 'False positive' then 'AML AI Net New'
-  #     WHEN NOT ${ai_aml} and ${rule_based} = 'True positive' then 'Rule based Net New'
-  #     WHEN NOT ${ai_aml} and ${rule_based} is NULL then 'AML AI Net New'
-  #   END
-  #   ;;
+  # dimension: net_new_indicator {
+  #   sql: CASE
+  #         WHEN ${classification} IN ("True positive","False positive") THEN "Overlap"
+  #         WHEN ${classification} IN ('True Positive - Not in Rule') THEN "Net New AML AI"
+  #         WHEN ${classification} IN ("False negative") THEN "Net New Rule based"
+  #         END
+  #         ;;
   # }
+
+
+
 
   measure: party_count {
     type: count_distinct
@@ -182,6 +200,20 @@ view: evaluation {
 
   measure: slider_fp {
     type: number
+  }
+
+  dimension: pk {
+    type: string
+    hidden: no
+    primary_key: yes
+    sql: FARM_FINGERPRINT(CONCAT(${TABLE}.date,${TABLE}.party_id)) ;;
+  }
+
+  measure: avg_risk_score {
+    type: average
+    label: "Risk Score"
+    value_format_name: percent_2
+    sql: ${risk_score} ;;
   }
 
   ### ###   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ###

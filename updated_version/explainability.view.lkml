@@ -41,7 +41,7 @@ view: explainability__attributions {
   }
   dimension: feature_family {
     type: string
-    sql: feature_family ;;
+    sql: UPPER(SUBSTR(REPLACE(feature_family,'_',' '),1,1))||SUBSTR(REPLACE(feature_family,'_',' '),2) ;;
   }
   measure: _attribution {
     type: average

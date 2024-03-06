@@ -122,7 +122,7 @@ view: party__residencies {
     hidden: yes
     sql: party__residencies ;;
   }
-  dimension: residencies_region_code {
+  dimension: residencies_r_region_code {
     type: string
     description: "MANDATORY: Country or region in two-letter Unicode CLDR code format."
     sql: party__residencies.region_code;;
@@ -137,7 +137,7 @@ view: party__nationalities {
     hidden: yes
     sql: party__nationalities ;;
   }
-  dimension: nationalities_region_code {
+  dimension: nationalities_n_region_code {
     type: string
     description: "MANDATORY: Country or region in two-letter Unicode CLDR code format."
     sql: party__nationalities.region_code ;;

@@ -27,22 +27,22 @@ include: "/flat/evaluation.view.lkml"
 #   from: risk_case_event_enhanced
 # }
 
-explore: evaluation {
-  from: risk_case_event_enhanced
+# explore: evaluation {
+#   from: risk_case_event_enhanced
 
-  join: predictions {
-    sql_on: ${evaluation.party_id} = ${predictions.party_id} AND ${predictions.risk_period_end_month} = ${evaluation.event_month} ;;
-    type: full_outer
-    relationship: many_to_one
-  }
+#   join: predictions {
+#     sql_on: ${evaluation.party_id} = ${predictions.party_id} AND ${predictions.risk_period_end_month} = ${evaluation.event_month} ;;
+#     type: full_outer
+#     relationship: many_to_one
+#   }
 
-  join: predictions_enhanced {
-    sql_on: ${predictions.party_id} = ${predictions_enhanced.party_id} AND ${predictions.risk_period_end_month} = ${predictions_enhanced.risk_period_end_time_month};;
-    fields: [predictions_enhanced.risk_label]
-    type: left_outer
-    relationship: one_to_one
-  }
-}
+#   join: predictions_enhanced {
+#     sql_on: ${predictions.party_id} = ${predictions_enhanced.party_id} AND ${predictions.risk_period_end_month} = ${predictions_enhanced.risk_period_end_time_month};;
+#     fields: [predictions_enhanced.risk_label]
+#     type: left_outer
+#     relationship: one_to_one
+#   }
+# }
 
 explore: engineconfigmetadata {}
 
