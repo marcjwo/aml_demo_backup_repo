@@ -105,10 +105,6 @@ view: evaluation {
     type: unquoted
   }
 
-  parameter: threshold_2 {
-    type: number
-  }
-
   dimension: ai_aml {
     type: yesno
     sql: (${risk_score}*100) > {% parameter threshold %} ;;
@@ -130,12 +126,26 @@ view: evaluation {
     ;;
   }
 
+  # dimension: aml_ai_ind {
+  #   type: string
+  #   sql:
+  #   CASE
+  #     WHEN ${classification} IN ('True positive', 'True Positive - Not in Rule') THEN 'True positive'
+  #     WHEN ${classification} IN ('False positive') THEN 'False positive'
+  #   END
+  #   ;;
+  # }
+
+  parameter: threshold_fp {
+    type: unquoted
+  }
+
   dimension: aml_ai_ind {
     type: string
     sql:
     CASE
-      WHEN ${classification} IN ('True positive', 'True Positive - Not in Rule') THEN 'True positive'
-      WHEN ${classification} IN ('False positive') THEN 'False positive'
+      WHEN ${ai_aml} = true and RAND() <= {% parameter threshold_fp %}/100 THEN 'True positive'
+      WHEN ${ai_aml} = true and RAND() > {% parameter threshold_fp %}/100 THEN 'False positive'
     END
     ;;
   }
@@ -167,6 +177,10 @@ view: evaluation {
   }
 
   measure: slider {
+    type: number
+  }
+
+  measure: slider_fp {
     type: number
   }
 
