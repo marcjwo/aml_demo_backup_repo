@@ -64,36 +64,31 @@ view: evaluation {
     END
       as investigation_threshold
     FROM
-      `finserv-looker-demo.output_v3.predictions` a
-      --(
-      --  SELECT * FROM `finserv-looker-demo.output_v3.predictions` WHERE RAND() <= 0.2
-      --) a
-      --(
-      --SELECT * FROM `finserv-looker-demo.output_v3.predictions` TABLESAMPLE SYSTEM (5 PERCENT)
-      --) a
-      -- (
-      -- SELECT
-      --   *
-      -- FROM
-      --   `finserv-looker-demo.output_v3.predictions`
-      -- WHERE
-      --   party_id IN (
-      --   SELECT
-      --     DISTINCT party_id
-      --   FROM
-      --     `finserv-looker-demo.input_v3.risk_case_event`)
-      -- UNION ALL
-      -- SELECT
-      --   *
-      -- FROM
-      --   `finserv-looker-demo.output_v3.predictions`
-      -- WHERE
-      --   party_id NOT IN (
-      --   SELECT
-      --     DISTINCT party_id
-      --   FROM
-      --     `finserv-looker-demo.input_v3.risk_case_event`)
-      --   AND RAND() <= 0.2 ) a
+      (
+
+      SELECT
+        *
+      FROM
+        `finserv-looker-demo.output_v3.predictions`
+      WHERE
+       party_id IN (
+        SELECT
+          DISTINCT party_id
+       FROM
+         `finserv-looker-demo.input_v3.risk_case_event`)
+      UNION ALL
+      SELECT
+       *
+      FROM
+       `finserv-looker-demo.output_v3.predictions`
+     WHERE
+        party_id NOT IN (
+       SELECT
+          DISTINCT party_id
+       FROM
+         `finserv-looker-demo.input_v3.risk_case_event`)
+       AND RAND() <= 0.2 ) a
+
     FULL OUTER JOIN (
       SELECT
         * EXCEPT(rn)
