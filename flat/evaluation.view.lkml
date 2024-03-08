@@ -166,8 +166,12 @@ view: evaluation {
   }
 
   dimension: aml_ai_fp_ind {
-    type: yesno
-    sql: ${aml_ai} AND (${investigation_threshold}*100) <= {% parameter threshold_fp %}
+    type: string
+    sql:
+    CASE
+      WHEN ${aml_ai} AND (${investigation_threshold}*100) <= {% parameter threshold_fp %} THEN 'True positive'
+      WHEN ${aml_ai} AND (${investigation_threshold}*100) > {% parameter threshold_fp %} THEN 'False positive'
+    END
     ;;
   }
 
@@ -175,10 +179,10 @@ view: evaluation {
     type: string
     sql:
     CASE
-      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = true then '1_Detected'
-      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = false then '2_Rule based exit'
-      WHEN ${rule_based} = 'False positive'AND ${aml_ai_fp_ind} = true then '3_AML AI Exit'
-      WHEN ${rule_based} IS NULL and ${aml_ai_fp_ind} then '3_AML AI Exit'
+      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = 'True positive' then '1_Detected'
+      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} IS NULL then '2_Rule based exit'
+      WHEN ${rule_based} = 'False positive'AND ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
+      WHEN ${rule_based} IS NULL and ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
     END
     ;;
   }
