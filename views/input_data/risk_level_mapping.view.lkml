@@ -1,4 +1,4 @@
-##Mock data by Lyndsey
+##Can remove
 view: risk_level_mapping {
     derived_table: {
       sql:
