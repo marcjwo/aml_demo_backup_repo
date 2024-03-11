@@ -25,88 +25,135 @@ view: evaluation {
   derived_table: {
     persist_for: "168 hours"
     sql: SELECT
-        a.* EXCEPT (label_id),
-        c.risk_label,
-      FROM
-      (SELECT
+    a.*,
+    b.* EXCEPT(party_id)
+  FROM (
+    SELECT
       CASE
-        WHEN a.party_id IS NOT NULL THEN a.party_id ELSE b.party_id end as party_id,
+        WHEN a.party_id IS NOT NULL THEN a.party_id
+      ELSE
+      b.party_id
+    END
+      AS party_id,
       CASE
-        WHEN a.risk_period_end_time IS NOT NULL THEN a.risk_period_end_time ELSE b.event_time end as date,
-      a.* except(party_id, risk_period_end_time),
-      b.* except(party_id, event_time),
+        WHEN a.risk_period_end_time IS NOT NULL THEN a.risk_period_end_time
+      ELSE
+      b.event_time
+    END
+      AS date,
+      a.* EXCEPT(party_id,
+        risk_period_end_time),
+      b.* EXCEPT(party_id,
+        event_time),
       CASE
-        WHEN a.risk_period_end_time IS NOT NULL AND b.event_time IS NOT NULL then "Present in both"
-        WHEN a.risk_period_end_time IS NOT NULL AND b.event_time IS NULL then "Present in AML AI"
-        WHEN a.risk_period_end_time IS NULL AND b.event_time IS NOT NULL then "Present in rule based only" END as indicator,
+        WHEN a.risk_period_end_time IS NOT NULL AND b.event_time IS NOT NULL THEN "Present in both"
+        WHEN a.risk_period_end_time IS NOT NULL
+      AND b.event_time IS NULL THEN "Present in AML AI"
+        WHEN a.risk_period_end_time IS NULL AND b.event_time IS NOT NULL THEN "Present in rule based only"
+    END
+      AS indicator,
       CASE
         WHEN b.type = 'AML_PROCESS_END' THEN 'False positive'
-        WHEN b.type = 'AML_EXIT' THEN 'True positive' END as rule_based,
-      CASE
-            WHEN MOD(ROW_NUMBER() OVER (), 3) = 0 THEN 'label_1'
-            WHEN MOD(ROW_NUMBER() OVER (), 5) = 0 THEN 'label_2'
-            WHEN MOD(ROW_NUMBER() OVER (), 7) = 0 THEN 'label_3'
-            WHEN MOD(ROW_NUMBER() OVER (), 11) = 0 THEN 'label_4'
-            WHEN MOD(ROW_NUMBER() OVER (), 13) = 0 THEN 'label_5'
-            WHEN MOD(ROW_NUMBER() OVER (), 17) = 0 THEN 'label_6'
-            WHEN MOD(ROW_NUMBER() OVER (), 19) = 0 THEN 'label_7'
-            WHEN MOD(ROW_NUMBER() OVER (), 23) = 0 THEN 'label_8'
-            WHEN MOD(ROW_NUMBER() OVER (), 29) = 0 THEN 'label_9'
-            WHEN MOD(ROW_NUMBER() OVER (), 31) = 0 THEN 'label_10'
-            WHEN MOD(ROW_NUMBER() OVER (), 37) = 0 THEN 'label_11'
-            WHEN MOD(ROW_NUMBER() OVER (), 41) = 0 THEN 'label_12'
-            WHEN MOD(ROW_NUMBER() OVER (), 43) = 0 THEN 'label_13'
-            WHEN MOD(ROW_NUMBER() OVER (), 47) = 0 THEN 'label_14'
-            WHEN MOD(ROW_NUMBER() OVER (), 53) = 0 THEN 'label_15'
-            WHEN MOD(ROW_NUMBER() OVER (), 56) = 0 THEN 'label_16'
-            ELSE 'label_17'
-        END
-          AS label_id
-      FROM
-      --(
-      --  SELECT * FROM `finserv-looker-demo.output_v3.predictions` WHERE RAND() <= 0.2
-      --) a
-      --(
-      --SELECT * FROM `finserv-looker-demo.output_v3.predictions` TABLESAMPLE SYSTEM (5 PERCENT)
-      --) a
+        WHEN b.type = 'AML_EXIT' THEN 'True positive'
+    END
+      AS rule_based,
+    CASE
+    WHEN a.risk_period_end_time IS NOT NULL
+      AND b.event_time IS NULL THEN RAND()
+    WHEN a.risk_period_end_time IS NOT NULL AND b.event_time IS NOT NULL THEN RAND()
+    END
+      as investigation_threshold
+    FROM
       (
+
       SELECT
-      *
-      FROM `finserv-looker-demo.output_v3.predictions`
-      WHERE party_id IN (SELECt distinct party_id FROM `finserv-looker-demo.input_v3.risk_case_event`) UNION ALL
+        *
+      FROM
+        `finserv-looker-demo.output_v3.predictions`
+      WHERE
+       party_id IN (
+        SELECT
+          DISTINCT party_id
+       FROM
+         `finserv-looker-demo.input_v3.risk_case_event`)
+      UNION ALL
       SELECT
-      *
-      FROM`finserv-looker-demo.output_v3.predictions`
-      WHERE party_id NOT IN (SELECT distinct party_id FROM `finserv-looker-demo.input_v3.risk_case_event`) AND RAND() <= 0.2
-      ) a
-      FULL OUTER JOIN (
-      SELECT * EXCEPT(rn)
-      FROM(
+       *
+      FROM
+       `finserv-looker-demo.output_v3.predictions`
+     WHERE
+        party_id NOT IN (
+       SELECT
+          DISTINCT party_id
+       FROM
+         `finserv-looker-demo.input_v3.risk_case_event`)
+       AND RAND() <= 0.2 ) a
+
+    FULL OUTER JOIN (
       SELECT
-      *,
-      ROW_NUMBER() OVER (PARTITION BY party_id, risk_case_id order by event_time desc, type asc) as rn
-       FROM `finserv-looker-demo.input_v3.risk_case_event`
-      )
-      WHERE rn = 1
-      ) b
-      ON a.party_id = b.party_id AND FORMAT_DATE("%Y-%m", a.risk_period_end_time) = FORMAT_DATE("%Y-%m", b.event_time)
-      -- where b.party_id is not null
-      ) a
-      LEFT JOIN
-        `finserv-looker-demo.enhancements_v3.risk_labels` c
-      ON
-        a.label_id=c.label_id ;;
+        * EXCEPT(rn)
+      FROM (
+        SELECT
+          *,
+          ROW_NUMBER() OVER (PARTITION BY party_id, risk_case_id ORDER BY event_time DESC, type ASC) AS rn
+        FROM
+          `finserv-looker-demo.input_v3.risk_case_event` )
+      WHERE
+        rn = 1 ) b
+    ON
+      a.party_id = b.party_id
+      AND FORMAT_DATE("%Y-%m", a.risk_period_end_time) = FORMAT_DATE("%Y-%m", b.event_time) ) a
+  LEFT JOIN (
+    SELECT
+      a.* EXCEPT(label_id),
+      c.risk_label
+    FROM (
+      SELECT
+        DISTINCT party_id,
+        ARRAY['label_1', 'label_2', 'label_3', 'label_4', 'label_5', 'label_6', 'label_7', 'label_8', 'label_9', 'label_10', 'label_11', 'label_12', 'label_13', 'label_14', 'label_15', 'label_16', 'label_17']
+       [SAFE_OFFSET(ABS(MOD(FARM_FINGERPRINT(CAST(party_id AS STRING)), 17)))] AS label_id
+      FROM (
+        SELECT
+        distinct party_id
+        FROM (
+
+        SELECT
+          party_id
+        FROM
+          `finserv-looker-demo.output_v3.predictions`
+        UNION ALL
+        SELECT
+          party_id
+        FROM
+          `finserv-looker-demo.input_v3.risk_case_event`)
+        )
+          ) a
+    LEFT JOIN
+      `finserv-looker-demo.enhancements_v3.risk_labels` c
+    ON
+      a.label_id=c.label_id ) b
+  ON
+    a.party_id = b.party_id ;;
   }
 
   ### additions   ###   ###   ###   ###   ### ###   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ###
+
+  # dimension: is_rule_based {
+  #   type: yesno
+  #   sql: ${type} = 'AML_EXIT' ;;
+  # }
 
   parameter: threshold {
     type: unquoted
   }
 
   dimension: aml_ai {
-    type: yesno
-    sql: (${risk_score}*100) > {% parameter threshold %};;
+    type: string
+    sql: CASE
+    WHEN ${risk_score} IS NOT NULL
+    AND (${risk_score}*100) >= {% parameter threshold %} THEN true
+    ELSE false
+    end;;
   }
 
   parameter: threshold_fp {
@@ -117,33 +164,20 @@ view: evaluation {
     type: string
     sql:
     CASE
-      WHEN ${aml_ai} = true and (RAND()*100) <= {% parameter threshold_fp %} THEN 'True positive'
-      WHEN ${aml_ai} = true and (RAND()*100) > {% parameter threshold_fp %} THEN 'False positive'
+      WHEN ${aml_ai} AND (${investigation_threshold}*100) <= {% parameter threshold_fp %} THEN 'True positive'
+      WHEN ${aml_ai} AND (${investigation_threshold}*100) > {% parameter threshold_fp %} THEN 'False positive'
     END
     ;;
   }
-
-  # dimension: net_new_indicator_ {
-  #   type: string
-  #   sql:
-  #   CASE
-  #     WHEN ${ai_aml_fp_ind} = 'True positive' AND ${rule_based} = 'True positive' then 'Overlap'
-  #     WHEN ${ai_aml_fp_ind} = 'True positive' AND ${rule_based} = 'False positive' then 'AML AI Net New'
-  #     WHEN ${ai_aml_fp_ind} = 'False positive' and ${rule_based} = 'True positive' then 'Rule based Net New'
-  #     WHEN ${ai_aml_fp_ind} = 'True positive' and ${rule_based} is NULL then 'AML AI Net New'
-  #   END
-  #   ;;
-  # }
 
   dimension: net_new_indicator {
     type: string
     sql:
     CASE
-      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} IS NULL then '2_Rule based exit'
-      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = 'False positive' then '2_Rule based exit'
       WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = 'True positive' then '1_Detected'
-      WHEN ${rule_based} = 'False positive' AND ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
-      WHEN ${rule_based} IS NULL AND ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
+      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} IS NULL then '2_Rule based exit'
+      WHEN ${rule_based} = 'False positive'AND ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
+      WHEN ${rule_based} IS NULL and ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
     END
     ;;
   }
@@ -163,31 +197,6 @@ view: evaluation {
         END
     ;;
   }
-
-  # dimension: aml_ai_ind {
-  #   type: string
-  #   sql:
-  #   CASE
-  #     WHEN ${classification} IN ('True positive', 'True Positive - Not in Rule') THEN 'True positive'
-  #     WHEN ${classification} IN ('False positive') THEN 'False positive'
-  #   END
-  #   ;;
-  # }
-
-
-
-
-  # dimension: net_new_indicator {
-  #   sql: CASE
-  #         WHEN ${classification} IN ("True positive","False positive") THEN "Overlap"
-  #         WHEN ${classification} IN ('True Positive - Not in Rule') THEN "Net New AML AI"
-  #         WHEN ${classification} IN ("False negative") THEN "Net New Rule based"
-  #         END
-  #         ;;
-  # }
-
-
-
 
   measure: party_count {
     type: count_distinct
@@ -221,6 +230,11 @@ view: evaluation {
   measure: count {
     type: count
     drill_fields: [detail*]
+  }
+
+  dimension: investigation_threshold {
+    type: number
+    sql: ${TABLE}.investigation_threshold ;;
   }
 
   dimension: party_id {
