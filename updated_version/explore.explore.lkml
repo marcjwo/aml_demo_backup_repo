@@ -6,6 +6,7 @@ include: "/updated_version/predictions_enhanced.view.lkml"
 include: "/updated_version/explainability.view.lkml"
 include: "/updated_version/transaction.view.lkml"
 include: "/updated_version/account_party_link.view.lkml"
+include: "/views/demo_mock/feature_family_desc.view.lkml"
 
 include: "/flat/evaluation.view.lkml"
 # explore: risk_case_event_enhanced {
@@ -80,5 +81,10 @@ explore: explainability {
     sql_on: ${account_party_link.account_id} = ${transaction.account_id} ;;
     relationship: one_to_many
     type: left_outer
+  }
+  join: feature_family_desc {
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${feature_family_desc.feature_family_name} = ${explainability__attributions.feature_family};;
   }
 }

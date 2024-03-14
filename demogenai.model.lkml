@@ -22,6 +22,8 @@ include: "/updated_version/skew.view.lkml"
 
 include: "/flat/model_performance.view.lkml"
 
+ include: "/views/demo_mock/*"
+
 # include: "/views/explainability.view.lkml"
 
 # include: "/views/input_data/risk_event_type_mapping_aiaml.view.lkml"
