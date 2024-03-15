@@ -94,4 +94,8 @@ view: transaction {
     type: count
     drill_fields: [transaction_id]
   }
+
+  set: transaction_details {
+    fields: [transaction_id,validity_start_date,type,direction,account_id,normalized_booked_amount__currency_code,_normalized_booked_amount__units]
+  }
 }

@@ -47,5 +47,9 @@ view: explainability__attributions {
     type: average
     sql: ${attribution} ;;
     value_format_name: decimal_2
+    link: {
+      label: "View Attribution Overview"
+      url: "/dashboards/15?Party+ID={{ value | encode_uri }}&Feature+Family={{ value | encode_uri }}"
+    }
   }
 }

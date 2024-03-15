@@ -247,6 +247,11 @@ view: evaluation {
     sql: ${TABLE}.date ;;
   }
 
+  dimension: risk_month_year {
+    type: string
+    sql:concat(${date_month_name}, ' ',${date_year});;
+  }
+
   dimension: risk_score {
     type: number
     sql: ${TABLE}.risk_score ;;
