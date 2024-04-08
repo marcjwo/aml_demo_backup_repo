@@ -49,7 +49,7 @@ view: explainability__attributions {
     value_format_name: decimal_2
     link: {
       label: "View Attribution Overview"
-      url: "/dashboards/15?Party+ID={{ value | encode_uri }}&Feature+Family={{ value | encode_uri }}"
+      url: "/dashboards/15?&Party+ID={{ _filters['explainability.party_id'] | url_encode }}"
     }
   }
 }

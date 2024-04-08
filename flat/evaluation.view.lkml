@@ -23,7 +23,8 @@ explore: flat_evalution {
 
 view: evaluation {
   derived_table: {
-    persist_for: "168 hours"
+ #   persist_for: "168 hours"
+    persist_for: "24 hours"
     sql: SELECT
     a.*,
     b.* EXCEPT(party_id)
@@ -182,6 +183,19 @@ view: evaluation {
     ;;
   }
 
+  # dimension: evaluation_output {
+  #   type: string
+  #   sql:
+  #   CASE
+  #     WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = 'True positive' then 'Missed by AML AI'
+  #     WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} IS NULL then 'Overlap'
+  #     WHEN ${rule_based} = 'False positive'AND ${aml_ai_fp_ind} = 'True positive' then 'Newly found by AML AI'
+  #     WHEN ${rule_based} IS NULL and ${aml_ai_fp_ind} = 'True positive' then 'Newly found by AML AI'
+  #   END
+  #   ;;
+  # }
+
+
 
   dimension: classification {
     type: string
@@ -196,6 +210,21 @@ view: evaluation {
           WHEN ${aml_ai} = false AND ${rule_based} IS NULL THEN 'True negative - Not in Rule'
         END
     ;;
+  }
+
+  dimension: classification_v2{
+    type: string
+    sql: CASE
+
+                WHEN ${aml_ai} = true AND ${rule_based} = 'True positive' THEN "True positive"
+                WHEN ${aml_ai} = true AND ${rule_based} = 'False positive' THEN "False positive"
+                WHEN ${aml_ai} = false AND ${rule_based} = 'False positive' THEN "True negative"
+                WHEN ${aml_ai} = false AND ${rule_based} = 'True positive' THEN "False negative"
+                WHEN ${indicator} = 'Present in rule based only' THEN "Out of Scope AML AI"
+                WHEN ${aml_ai} = true AND ${rule_based} IS NULL THEN 'True Positive - Not in Rule'
+                WHEN ${aml_ai} = false AND ${rule_based} IS NULL THEN 'True negative - Not in Rule'
+              END
+          ;;
   }
 
   measure: party_count {

@@ -18,3 +18,7 @@ constant: output_dataset {
 #   url: "https://github.com/looker-open-source/viz-gauge-marketplace.git"
 #   ref: "master"
 # }
+
+# remote_dependency: venn_diagram {
+#   url: "https://github.com/gcalvo1/looker-custom-visualizations/tree/master/venn_diagram"
+# }
