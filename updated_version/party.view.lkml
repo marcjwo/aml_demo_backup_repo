@@ -100,14 +100,14 @@ view: party {
 
   dimension: last_name {
     type: string
-    sql: "Doe" ;;
+    sql: " Doe" ;;
   }
 
   dimension: name {
     type: string
     sql:
     CASE WHEN ${type} = 'CONSUMER' THEN CONCAT(${first_name},${last_name})
-    WHEN ${type} = 'COMPANY' THEN 'Alphabet Inc'
+    WHEN ${type} = 'COMPANY' THEN 'Symbol Corp'
     END
     ;;
   }
