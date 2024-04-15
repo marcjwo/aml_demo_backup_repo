@@ -64,6 +64,22 @@ view: slide_8_static_data {
     sql: ${TABLE}.aml_risk_label ;;
   }
 
+
+  dimension: missed {
+    type: number
+    sql: ${TABLE}.missed_by_aml_ai ;;
+  }
+
+  dimension: overlap_output {
+    type: number
+    sql: ${TABLE}.overlap ;;
+  }
+
+  dimension: new {
+    type: number
+    sql: ${TABLE}.newly_found_by_aml_ai ;;
+  }
+
   measure: missed_by_aml_ai {
     type: sum
     sql: ${TABLE}.missed_by_aml_ai ;;
@@ -114,6 +130,49 @@ view: slide_8_static_data {
     sql: (${TABLE}.performance_uplift_)/100 ;;
     value_format_name: percent_0
 
+  }
+
+  # dimension: output {
+  #   type: string
+  #   sql: case when ${missed} > 0 then 'Rules Based'
+  #   when ${new} > 0 then 'AML AI'
+  #   when ${overlap_output} > 0 then 'AML AI & Rules Based'end ;;
+  # }
+  # measure: results {
+  #   type: number
+  #   sql: case when ${output} = 'Rules Based'then ${missed_by_aml_ai}
+  #         when ${output} = 'AML AI'then ${newly_found_by_aml_ai}
+  #         when ${output}= 'AML AI & Rules Based' then ${overlap} end ;;
+  # }
+
+}
+
+
+ explore: output_totals {}
+
+view: output_totals {
+  derived_table: {
+    sql:
+      SELECT
+        'Net New Rules' AS output_label, 25 AS output_totals
+      UNION ALL
+      SELECT
+        'Net New Rules & AML AI' AS output_label, 184 AS output_totals
+      UNION ALL
+      SELECT
+        'Net New AML AI' AS output_label, 1283 AS output_totals
+
+      ;;
+  }
+
+  dimension: output_label {
+    type: string
+    sql: ${TABLE}.output_label ;;
+  }
+
+  measure: output_totals {
+    type: sum
+    sql: ${TABLE}.output_totals ;;
   }
 
 }
