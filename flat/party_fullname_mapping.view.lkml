@@ -320,7 +320,8 @@ view: party_fullname_mapping {
       sql: ${TABLE}.full_name ;;
     }
 
-    dimension: party_id_filter {
+    dimension: party_party_id {
+      label: "Party ID Filter"
       type: string
       sql: ${TABLE}.party_party_id ;;
     }

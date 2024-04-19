@@ -13,8 +13,8 @@ explore: flat_evalution {
   join: party_fullname_mapping {
     view_label: "Party"
     type: left_outer
-    sql: ${party.party_id} = ${party_fullname_mapping.party_id_filter};;
-    relationship: one_to_one
+    sql_on: ${flat_evalution.party_id} = ${party_fullname_mapping.party_party_id};;
+    relationship: many_to_one
   }
 
   join: party__residencies {
