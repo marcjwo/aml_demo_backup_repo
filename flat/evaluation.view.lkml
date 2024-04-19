@@ -1,4 +1,5 @@
 include: "/updated_version/party.view.lkml"
+include: "/flat/party_fullname_mapping.view.lkml"
 
 explore: flat_evalution {
   from: evaluation
@@ -18,6 +19,11 @@ explore: flat_evalution {
     view_label: "Party: Nationalities"
     sql: LEFT JOIN UNNEST(${party.nationalities}) as party__nationalities ;;
     relationship: one_to_many
+  }
+  join: party_fullname_mapping {
+    view_label: "Party"
+    sql_on: ${flat_evalution.party_id} = ${party_fullname_mapping.party_party_id} ;;
+    relationship: many_to_one
   }
 }
 
