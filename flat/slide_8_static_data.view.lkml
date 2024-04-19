@@ -154,13 +154,13 @@ view: output_totals {
   derived_table: {
     sql:
       SELECT
-        'Net New Rules' AS output_label, 25 AS output_totals
+        'Net New: Rules' AS output_label, 25 AS output_totals
       UNION ALL
       SELECT
-        'Net New Rules & AML AI' AS output_label, 184 AS output_totals
+        'Net New: Rules & Net New: AML AI' AS output_label, 184 AS output_totals
       UNION ALL
       SELECT
-        'Net New AML AI' AS output_label, 1283 AS output_totals
+        'Net New: AML AI' AS output_label, 1283 AS output_totals
 
       ;;
   }

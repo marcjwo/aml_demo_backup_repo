@@ -1,33 +1,13 @@
-include: "/updated_version/party.view.lkml"
-
-explore: flat_evalution {
-  from: evaluation
-
-  join: party {
-    sql_on: ${flat_evalution.party_id} = ${party.party_id} ;;
-    type: left_outer
-    relationship: many_to_many
-  }
-
-  join: party__residencies {
-    view_label: "Party: Residencies"
-    sql: LEFT JOIN UNNEST(${party.residencies}) as party__residencies ;;
-    relationship: one_to_many
-  }
-  join: party__nationalities {
-    view_label: "Party: Nationalities"
-    sql: LEFT JOIN UNNEST(${party.nationalities}) as party__nationalities ;;
-    relationship: one_to_many
-  }
-}
 
 view: evaluation {
   derived_table: {
     #   persist_for: "168 hours"
     persist_for: "24 hours"
-    sql: SELECT
+    sql:
+        SELECT
           a.*,
-          b.* EXCEPT(party_id)
+          b.* EXCEPT(party_id),
+          ROW_NUMBER() OVER(PARTITION BY a.date, a.rule_based ORDER BY a.risk_score DESC) AS risk_rank
         FROM (
           SELECT
             CASE
@@ -134,7 +114,7 @@ view: evaluation {
       ON
       a.label_id=c.label_id ) b
       ON
-      a.party_id = b.party_id ;;
+      a.party_id = b.party_id;;
   }
 
   ### additions   ###   ###   ###   ###   ### ###   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ######   ###   ###   ###   ###
@@ -314,6 +294,11 @@ view: evaluation {
   dimension: risk_label {
     type: string
     sql: ${TABLE}.risk_label ;;
+  }
+
+  dimension: risk_rank {
+    type: number
+    sql: ${TABLE}.risk_rank;;
   }
 
   set: detail {
