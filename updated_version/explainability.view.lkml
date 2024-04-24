@@ -46,7 +46,7 @@ view: explainability__attributions {
   measure: _attribution {
     type: average
     sql: ${attribution} ;;
-    value_format_name: decimal_4
+    value_format_name: decimal_2
     link: {
       label: "View Attribution Overview"
       url: "/dashboards/15?&Party+ID={{ _filters['explainability.party_id'] | url_encode }}"
