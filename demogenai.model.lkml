@@ -20,9 +20,9 @@ include: "/updated_version/model_performance.view.lkml"
 
 include: "/updated_version/skew.view.lkml"
 
-include: "/flat/model_performance.view.lkml"
+include: "/flat/*.view.lkml"
 
- include: "/views/demo_mock/*"
+include: "/views/demo_mock/*"
 
 include: "/explores/output_static.explore.lkml"
 

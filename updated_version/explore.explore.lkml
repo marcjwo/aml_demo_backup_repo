@@ -8,7 +8,7 @@ include: "/updated_version/transaction.view.lkml"
 include: "/updated_version/account_party_link.view.lkml"
 include: "/views/demo_mock/feature_family_desc.view.lkml"
 
-include: "/flat/evaluation.view.lkml"
+include: "/flat/*.view.lkml"
 # explore: risk_case_event_enhanced {
 
 #   join:  predictions {
@@ -61,6 +61,12 @@ explore: explainability {
     sql_on: ${explainability.party_id} = ${party.party_id} ;;
     relationship: many_to_one
     type: left_outer
+  }
+  join: party_fullname_mapping {
+    view_label: "Party"
+    type: left_outer
+    sql_on: ${explainability.party_id} = ${party_fullname_mapping.party_party_id};;
+    relationship: many_to_one
   }
   join: party__residencies {
     view_label: "Party: Residencies"
