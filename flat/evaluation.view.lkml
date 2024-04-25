@@ -1,3 +1,6 @@
+explore: rule_based {
+  from: evaluation
+}
 
 view: evaluation {
   derived_table: {
@@ -8,7 +11,8 @@ view: evaluation {
           a.*,
           b.* EXCEPT(party_id),
           ROW_NUMBER() OVER(PARTITION BY a.date, a.rule_based ORDER BY a.risk_score DESC) AS risk_rank
-        FROM (
+        FROM
+        (
           SELECT
             CASE
               WHEN a.party_id IS NOT NULL THEN a.party_id
@@ -16,12 +20,14 @@ view: evaluation {
             b.party_id
           END
             AS party_id,
+
             CASE
               WHEN a.risk_period_end_time IS NOT NULL THEN a.risk_period_end_time
             ELSE
             b.event_time
           END
             AS date,
+
             a.* EXCEPT(party_id,
               risk_period_end_time),
             b.* EXCEPT(party_id,
@@ -33,17 +39,20 @@ view: evaluation {
               WHEN a.risk_period_end_time IS NULL AND b.event_time IS NOT NULL THEN "Present in rule based only"
           END
             AS indicator,
+
             CASE
               WHEN b.type = 'AML_PROCESS_END' THEN 'False positive'
               WHEN b.type = 'AML_EXIT' THEN 'True positive'
           END
             AS rule_based,
+
           CASE
           WHEN a.risk_period_end_time IS NOT NULL
             AND b.event_time IS NULL THEN RAND()
           WHEN a.risk_period_end_time IS NOT NULL AND b.event_time IS NOT NULL THEN RAND()
           END
             as investigation_threshold
+
           FROM
             (
 

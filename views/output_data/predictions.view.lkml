@@ -1,19 +1,26 @@
 view: predictions {
-  # sql_table_name: `finserv-looker-demo.@{output_dataset}.predictions` ;;
-  sql_table_name: `finserv-looker-demo.@{output_dataset}.additionally_generated_data` ;;
+   sql_table_name: `finserv-looker-demo.output_v3.predictions` ;;
+#  sql_table_name: `finserv-looker-demo.@{output_dataset}.additionally_generated_data` ;;
 
   dimension: party_id {
-    primary_key: yes            #### will this work in combination with risk_period_end? Mock data does not indicate, likely to create surrogate key with farm_fingerprint
+ #   primary_key: yes            #### will this work in combination with risk_period_end? Mock data does not indicate, likely to create surrogate key with farm_fingerprint
     type: string
  #   hidden: yes
     sql: ${TABLE}.party_id ;;
   }
   dimension_group: risk_period_end {
     type: time
-    timeframes: [date]
-    # timeframes: [raw, time, date, week, month, quarter, year]
+    timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}.risk_period_end_time ;;
   }
+  dimension_group: risk_period_end_formatted { ##move to refinements file
+    label: "Risk Period Month & Year"
+    type: time
+    timeframes: [date]
+    sql: FORMAT_DATETIME("%b-%y",${risk_period_end_raw});;
+    }
+
+
   dimension: risk_score {
     hidden: no
     type: number
@@ -25,6 +32,8 @@ view: predictions {
     type: count
     drill_fields: [party.party_id]
   }
+
+
 
 
 
@@ -65,5 +74,6 @@ view: predictions {
     sql: ${risk_score} < 50  ;;
     value_format_name: percent_2
   }
+
 
 }

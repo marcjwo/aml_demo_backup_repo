@@ -1,5 +1,7 @@
 connection: "finserv-bq-connection-looker"
 
+include: "/final_demo/explores/output_evaluation.explore.lkml"
+
 # include: "/views/*/*.view.lkml"                # include all views in the views/ folder in this project
 
 # include: "/explores/input_data.explore.lkml"
@@ -14,9 +16,9 @@ connection: "finserv-bq-connection-looker"
 
 # include: "/views/risk_case_event_enhanced.view.lkml"
 
-include: "/updated_version/explore.explore.lkml"
+#include: "/updated_version/explore.explore.lkml"
 
-include: "/updated_version/model_performance.view.lkml"
+include: "/updated_version/*"
 
 include: "/updated_version/skew.view.lkml"
 

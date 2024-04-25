@@ -60,19 +60,19 @@ view: predictions {
   #   sql: ${true_positive_aml_ai} = false and ${risk_case_event_enhanced.true_positive_rule_based} ;;
   # }
 
-  dimension: classification {
-    type: string
-    sql: CASE
-          WHEN ${ai_aml} = true AND ${evaluation.true_positive_rule_based} = true AND ${party_id} IS NOT NULL and ${evaluation.type} = "AML_EXIT" THEN "True positive"
-          WHEN ${ai_aml} = true AND ${evaluation.true_positive_rule_based} = false AND ${party_id} IS NOT NULL and ${evaluation.type} = "AML_PROCESS_END" THEN "False positive"
-          WHEN ${ai_aml} = false AND ${evaluation.true_positive_rule_based} = false AND ${party_id} IS NOT NULL and ${evaluation.type} = "AML_PROCESS_END" THEN "True negative"
-          WHEN ${ai_aml} = false AND ${evaluation.true_positive_rule_based} = true AND ${party_id} IS NOT NULL and ${evaluation.type} = "AML_EXIT" THEN "False negative"
-          WHEN ${party_id} IS NULL THEN "Out of Scope AML AI"
-          WHEN ${ai_aml} = true AND ${evaluation.true_positive_rule_based} is NULL THEN 'True Positive - Not in Rule'
-          when ${ai_aml} = false AND ${evaluation.true_positive_rule_based} is NULL THEN 'True negative - Not in Rule'
-        END
-    ;;
-  }
+  # dimension: classification { ## 4/25 - can we comment this out?
+  #   type: string
+  #   sql: CASE
+  #         WHEN ${ai_aml} = true AND ${evaluation.true_positive_rule_based} = true AND ${party_id} IS NOT NULL and ${evaluation.type} = "AML_EXIT" THEN "True positive"
+  #         WHEN ${ai_aml} = true AND ${evaluation.true_positive_rule_based} = false AND ${party_id} IS NOT NULL and ${evaluation.type} = "AML_PROCESS_END" THEN "False positive"
+  #         WHEN ${ai_aml} = false AND ${evaluation.true_positive_rule_based} = false AND ${party_id} IS NOT NULL and ${evaluation.type} = "AML_PROCESS_END" THEN "True negative"
+  #         WHEN ${ai_aml} = false AND ${evaluation.true_positive_rule_based} = true AND ${party_id} IS NOT NULL and ${evaluation.type} = "AML_EXIT" THEN "False negative"
+  #         WHEN ${party_id} IS NULL THEN "Out of Scope AML AI"
+  #         WHEN ${ai_aml} = true AND ${evaluation.true_positive_rule_based} is NULL THEN 'True Positive - Not in Rule'
+  #         when ${ai_aml} = false AND ${evaluation.true_positive_rule_based} is NULL THEN 'True negative - Not in Rule'
+  #       END
+  #   ;;
+  # }
 
   # dimension: classification_rule_based {
   #   type: string
