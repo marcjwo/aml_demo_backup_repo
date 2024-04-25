@@ -239,7 +239,7 @@ view: evaluation {
   measure: avg_risk_score {
     type: average
     label: "Risk Score"
-    value_format_name: percent_2
+    value_format_name: percent_0
     sql: ${risk_score} ;;
   }
 
