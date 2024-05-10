@@ -6,7 +6,6 @@ view: risk_case_event_enhanced_join {
 #try this https://www.googlecloudcommunity.com/gc/Technical-Tips-Tricks/How-do-I-do-a-ROW-NUMBER-OVER-PARTITION-BY-with-a-table-calc/ta-p/588151
 derived_table: {
   sql:
-with output as (
 SELECT
    b.party_id,
    b.risk_score,
@@ -27,7 +26,7 @@ SELECT
  FULL OUTER JOIN
    ${view4.SQL_TABLE_NAME} a
  ON
-   a.party_id = b.party_id)
+   a.party_id = b.party_id
 ;;
 
 }
