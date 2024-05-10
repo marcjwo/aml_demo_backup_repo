@@ -30,10 +30,7 @@ SELECT
    ${view4.SQL_TABLE_NAME} a
  ON
    a.party_id = b.party_id)
-
-    (SELECT *, ROW_NUMBER() OVER(PARTITION BY risk_period_end_time_format, risk_label ORDER BY risk_score DESC) AS rank_risk_monthly FROM output )
-  where rank_risk = 1
-  );;
+;;
 
 }
 
