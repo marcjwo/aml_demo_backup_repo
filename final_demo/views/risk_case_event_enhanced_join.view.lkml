@@ -1,5 +1,47 @@
+#explore: risk_case_event_enhanced_join {}
+
 view: risk_case_event_enhanced_join {
-  sql_table_name: `finserv-looker-demo.enhancements_v3.risk_case_event_enhanced_join` ;;
+#  sql_table_name: `finserv-looker-demo.enhancements_v3.risk_case_event_enhanced_join` ;;
+
+#try this https://www.googlecloudcommunity.com/gc/Technical-Tips-Tricks/How-do-I-do-a-ROW-NUMBER-OVER-PARTITION-BY-with-a-table-calc/ta-p/588151
+derived_table: {
+  sql:
+with output as (
+SELECT
+   b.party_id,
+   b.risk_score,
+   b.risk_period_end_time,
+   FORMAT_DATETIME("%b-%y",b.risk_period_end_time) AS risk_period_end_time_format,
+   a.risk_case_event_id,
+   a.event_time,
+   FORMAT_DATETIME("%b-%y",a.event_time) AS event_time_format,
+   a.type,
+   a.party_id AS party,
+   a.risk_case_id,
+   a.risk_label,
+   case when date(risk_period_end_time) between date_sub(date(date_trunc(minimum, month)), Interval 2 month) and date_sub(date(date_trunc(maximum, month)), Interval 2 month) and type = "AML_EXIT" then "Positive"
+   else "Negative" end as label, a.minimum, a.maximum,
+   ROW_NUMBER() OVER(PARTITION BY a.party_id, a.risk_case_id ORDER BY b.risk_score DESC) AS rank_risk
+ FROM
+   finserv-looker-demo.output_v3.predictions b
+ FROM
+   finserv-looker-demo.output_v3.predictions b
+ FULL OUTER JOIN
+   ${view4.SQL_TABLE_NAME} a
+ ON
+   a.party_id = b.party_id)
+
+    (SELECT *, ROW_NUMBER() OVER(PARTITION BY risk_period_end_time_format, risk_label ORDER BY risk_score DESC) AS rank_risk_monthly FROM output )
+  where rank_risk = 1
+  );;
+
+}
+
+  #   (SELECT *, ROW_NUMBER() OVER(PARTITION BY risk_period_end_time_format, risk_label ORDER BY risk_score DESC) AS rank_risk_monthly FROM output )
+  # where rank_risk = 1
+  # );;
+
+
 
   dimension: pk {
     type: string
@@ -68,21 +110,44 @@ view: risk_case_event_enhanced_join {
     type: string
     sql: ${TABLE}.type ;;
   }
-  measure: count {
-    type: count
+  dimension: rank_risk {
+    type: number
+    sql: ${TABLE}.rank_risk ;;
+  }
+
+
+  measure: party_count {
+    type: count_distinct
+    sql: ${party_id} ;;
+  }
+
+  measure: party_count_rank {
+    type: count_distinct
+    sql: ${party_id} ;;
+    filters: [rank_risk: "1"]
   }
 
 
   ###added
+
   parameter: threshold { ## AML AI
     type: unquoted
   }
 
+  # dimension: aml_ai {
+  #   type: string
+  #   sql: CASE
+  #         WHEN  ${risk_case_event_enhanced_rank.risk_score} IS NOT NULL
+  #         AND (${risk_case_event_enhanced_rank.risk_score}*100) >= {% parameter threshold %} THEN true
+  #         ELSE false
+  #         end;;
+  # }
+
   dimension: aml_ai {
     type: string
     sql: CASE
-          WHEN  ${risk_case_event_enhanced_rank.risk_score} IS NOT NULL
-          AND (${risk_case_event_enhanced_rank.risk_score}*100) >= {% parameter threshold %} THEN true
+          WHEN  ${risk_score} IS NOT NULL
+          AND ${risk_score} >= {% parameter threshold %} THEN true
           ELSE false
           end;;
   }
@@ -90,12 +155,12 @@ view: risk_case_event_enhanced_join {
   dimension: classification { ##classify
     type: string
     sql: CASE
-      WHEN ${aml_ai} = true AND ${label} = 'Positive' AND ${type} IS NOT NULL THEN "True Positive"
-      WHEN ${aml_ai} = true AND ${label} = 'Negative' AND ${type} IS NOT NULL THEN "False Positive"
-      WHEN ${aml_ai} = false AND ${label} = 'Negative' AND ${type} IS NOT NULL THEN "True Negative"
-      WHEN ${aml_ai} = false AND ${label} = 'Positive' AND ${type} IS NOT NULL THEN "False Negative"
-      WHEN ${aml_ai} = true AND ${label} = 'Negative' AND  ${type} IS NOT NULL THEN 'True Positive - Not in Rule'
-      WHEN ${aml_ai} = false AND ${label} = 'Negative' AND ${type} IS NOT NULL THEN 'True Negative - Not in Rule'
+      WHEN ${aml_ai} = true AND ${label} = 'Positive' AND ${type} IS NOT NULL THEN 'True Positive'
+      WHEN ${aml_ai} = true AND ${label} = 'Negative' AND ${type} IS NOT NULL THEN 'False Positive'
+      WHEN ${aml_ai} = false AND ${label} = 'Negative' AND ${type} IS NOT NULL THEN 'True Negative'
+      WHEN ${aml_ai} = false AND ${label} = 'Positive' AND ${type} IS NOT NULL THEN 'False Negative'
+      WHEN ${aml_ai} = true AND ${label} = 'Negative' AND  ${type} IS NULL THEN 'True Positive - Not in Rule'
+      WHEN ${aml_ai} = false AND ${label} = 'Negative' AND ${type} IS NULL THEN 'True Negative - Not in Rule'
       END ;;
   }
 
@@ -107,8 +172,8 @@ view: risk_case_event_enhanced_join {
     type: string
     sql:
     CASE
-      WHEN ${aml_ai} AND (${investigation_threshold}*100) <= {% parameter threshold_fp %} THEN 'True positive'
-      WHEN ${aml_ai} AND (${investigation_threshold}*100) > {% parameter threshold_fp %} THEN 'False positive'
+      WHEN ${aml_ai} AND (${investigation_threshold}) <= {% parameter threshold_fp %} THEN 'True positive'
+      WHEN ${aml_ai} AND (${investigation_threshold}) > {% parameter threshold_fp %} THEN 'False positive'
     END
     ;;
   }
@@ -141,5 +206,14 @@ view: risk_case_event_enhanced_join {
               WHEN ${type} = 'AML_EXIT' AND ${label} = 'Positive' THEN 'True positive'
           END;;
   }
+
+  dimension: model_output {
+    type: string
+    sql: case when ${classification} = 'True Positive' ;;
+  }
+
+
+
+
 
 }

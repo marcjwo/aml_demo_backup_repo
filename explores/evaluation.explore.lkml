@@ -18,9 +18,9 @@ explore: evaluation {
   from: risk_case_event_enhanced_join
   label: "Flat Evaluation"
 
-  join: risk_label_mapping {
+  join: view1 {
     type: left_outer
-    sql_on: ${evaluation.risk_case_id} = ${risk_label_mapping.risk_case_id}  ;;
+    sql_on: ${evaluation.risk_case_id} = ${view1.risk_case_id}  ;;
     # sql_where: ((${risk_case_event_enhanced_join.type} = 'AML_EXIT' and ${risk_case_event_enhanced_join.label} = 'Positive') or
     # (${risk_case_event_enhanced_join.type} = 'AML_PROCESS_END' and ${risk_case_event_enhanced_join.label} = 'Negative'));;
     relationship: many_to_one

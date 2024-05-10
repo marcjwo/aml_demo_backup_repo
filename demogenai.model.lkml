@@ -29,6 +29,8 @@ include: "/views/demo_mock/*"
 include: "/explores/output_static.explore.lkml"
 
 include: "/explores/evaluation.explore.lkml"
+include: "/final_demo/explores/*"
+include: "/final_demo/views/*"
 
 # include: "/views/explainability.view.lkml"
 

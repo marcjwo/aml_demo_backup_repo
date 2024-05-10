@@ -1,4 +1,4 @@
-
+##view1
 view: risk_label_mapping {
   derived_table: {
     sql: WITH
