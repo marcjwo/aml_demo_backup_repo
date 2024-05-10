@@ -11,7 +11,7 @@ view: view4 {
        END as label
        from finserv-looker-demo.input_v3.risk_case_event a join data_1 b on
        a.risk_case_id = b.risk_case_id) a
-      LEFT JOIN `${view1.SQL_TABLE_NAME} b
+      LEFT JOIN ${view1.SQL_TABLE_NAME} b
       ON a.risk_case_id = b.risk_case_id
       where ((type = 'AML_EXIT' and label = "Positive") or (type = 'AML_PROCESS_END' and label = "Negative")) ;;
   }
