@@ -24,8 +24,6 @@ SELECT
    ROW_NUMBER() OVER(PARTITION BY a.party_id, a.risk_case_id ORDER BY b.risk_score DESC) AS rank_risk
  FROM
    finserv-looker-demo.output_v3.predictions b
- FROM
-   finserv-looker-demo.output_v3.predictions b
  FULL OUTER JOIN
    ${view4.SQL_TABLE_NAME} a
  ON
