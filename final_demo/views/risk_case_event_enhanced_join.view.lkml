@@ -123,11 +123,20 @@ persist_for: "24 hours"
     filters: [rank_risk: "1"]
   }
 
-  # measure: count_of_parties {
-  #   type: count_distinct
-  #   sql: CASE WHEN (${risk_case_event_enhanced_join.classification} = 'True Positive - Not in Rule' OR ${risk_case_event_enhanced_join.classification} =  'True Negative - Not in Rule') then ${party_id}
-  #   WHEN (${risk_case_event_enhanced_join.classification} != 'True Positive - Not in Rule' OR ${risk_case_event_enhanced_join.classification} !=  'True Negative - Not in Rule') AND ${rank_risk} = 1 THEN ${party_id} END;;
-  # }
+  parameter: investigation_threshold {
+    type: unquoted
+  }
+
+  measure: count_of_parties {
+    type: number
+    sql: CASE WHEN ${classification} =  'True Negative - Not in Rule'then count(${party_id})*{% parameter investigation_threshold %}
+         WHEN ${classification}  = 'True Positive - Not in Rule' THEN count(${party_id})
+    WHEN (${classification}  != 'True Positive - Not in Rule' OR ${classification}  !=  'True Negative - Not in Rule')
+    AND ${rank_risk} = 1 THEN count(${party_id})*(1-{% parameter investigation_threshold %}) END;;
+  }
+
+
+
 
 
   ###added
@@ -136,14 +145,6 @@ persist_for: "24 hours"
     type: unquoted
   }
 
-  # dimension: aml_ai {
-  #   type: string
-  #   sql: CASE
-  #         WHEN  ${risk_case_event_enhanced_rank.risk_score} IS NOT NULL
-  #         AND (${risk_case_event_enhanced_rank.risk_score}*100) >= {% parameter threshold %} THEN true
-  #         ELSE false
-  #         end;;
-  # }
 
   dimension: classification { ##classify
     type: string
@@ -168,6 +169,7 @@ persist_for: "24 hours"
           end;;
   }
 
+
   parameter: threshold_fp {
     type: unquoted
   }
@@ -181,14 +183,14 @@ persist_for: "24 hours"
     END
     ;;
   }
-  dimension: investigation_threshold { ##fp
-    type: number
-    sql:
-       CASE
-              WHEN ${risk_period_end_raw} IS NOT NULL AND ${event_raw} IS NULL THEN RAND()
-              WHEN ${risk_period_end_raw} IS NOT NULL AND  ${event_raw} IS NOT NULL THEN RAND()
-              END;;
-  }
+  # dimension: investigation_threshold { ##fp
+  #   type: number
+  #   sql:
+  #     CASE
+  #             WHEN ${risk_period_end_raw} IS NOT NULL AND ${event_raw} IS NULL THEN RAND()
+  #             WHEN ${risk_period_end_raw} IS NOT NULL AND  ${event_raw} IS NOT NULL THEN RAND()
+  #             END;;
+  # }
 
 
   dimension: rule_based {
