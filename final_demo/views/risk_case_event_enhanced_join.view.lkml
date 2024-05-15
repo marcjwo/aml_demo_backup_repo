@@ -32,13 +32,6 @@ persist_for: "24 hours"
 }
 
 
-#   ${view4.SQL_TABLE_NAME} a
-  #   (SELECT *, ROW_NUMBER() OVER(PARTITION BY risk_period_end_time_format, risk_label ORDER BY risk_score DESC) AS rank_risk_monthly FROM output )
-  # where rank_risk = 1
-  # );;
-
-
-
   dimension: pk {
     type: string
     hidden: no
@@ -136,9 +129,6 @@ persist_for: "24 hours"
   }
 
 
-
-
-
   ###added
 
   parameter: threshold { ## AML AI
@@ -156,19 +146,7 @@ persist_for: "24 hours"
       WHEN ${aml_ai} = false AND ${label} = 'Negative'  AND ${type} IS NOT NULL THEN 'True Negative - Not in Rule'
       END ;;
    }
-  # dimension: classification { ##classify
-  #   type: string
-  #   sql: CASE
-  #     WHEN ${aml_ai} = true AND ${label} = 'Positive' AND ${type} IS NOT NULL AND ${rank_risk} = 1 THEN 'True Positive'
-  #     WHEN ${aml_ai} = true AND ${label} = 'Negative' AND ${type} IS NOT NULL AND ${rank_risk} = 1 THEN 'False Positive'
-  #     WHEN ${aml_ai} = false AND ${label} = 'Negative' AND ${type} IS NOT NULL AND ${rank_risk} = 1 THEN 'True Negative'
-  #     WHEN ${aml_ai} = false AND ${label} = 'Positive' AND ${type} IS NOT NULL AND ${rank_risk} = 1 THEN 'False Negative'
-  #     WHEN ${aml_ai} = true AND ${label} = 'Negative' AND  ${type} IS NOT NULL THEN 'True Positive - Not in Rule'
-  #     WHEN ${aml_ai} = false AND ${label} = 'Negative'  AND ${type} IS NOT NULL THEN 'True Negative - Not in Rule'
-  #     END ;;
-  # }
 
-  #${type} IS NULL THEN
 
   dimension: aml_ai {
     type: string
@@ -184,24 +162,6 @@ persist_for: "24 hours"
     type: unquoted
   }
 
-  dimension: aml_ai_fp_ind {
-    type: string
-    sql:
-    CASE
-      WHEN ${aml_ai} AND ${investigation_threshold} <= {% parameter threshold_fp %} THEN 'True positive'
-      WHEN ${aml_ai} AND ${investigation_threshold} > {% parameter threshold_fp %} THEN 'False positive'
-    END
-    ;;
-  }
-  # dimension: investigation_threshold { ##fp
-  #   type: number
-  #   sql:
-  #     CASE
-  #             WHEN ${risk_period_end_raw} IS NOT NULL AND ${event_raw} IS NULL THEN RAND()
-  #             WHEN ${risk_period_end_raw} IS NOT NULL AND  ${event_raw} IS NOT NULL THEN RAND()
-  #             END;;
-  # }
-
 
   dimension: rule_based {
     type: string
@@ -211,49 +171,59 @@ persist_for: "24 hours"
                 ELSE 'True Positive'
           END;;
     }
+
+  # dimension: venn_diagram { ## not needed
+  #   type: string
+  #   sql:     CASE
+  #     WHEN ${classification} = 'True Positive'  then 'Rules Based & AML AI'
+  #     WHEN ${classification} = 'False Negative'  then 'Rules Based'
+  #     WHEN ${classification} = 'True Positive - Not in Rule' then 'AML AI'
+  #   END
+  #   ;;
+  # }
+
+  #############################
     ##old logic
   # sql: CASE
   # WHEN ${type} = 'AML_PROCESS_END' AND (${label} = 'Negative' AND ${type} IS NOT NULL) THEN 'False positive'
   # WHEN ${type} = 'AML_EXIT' AND (${label} = 'Positive'  AND ${type} IS  NULL) THEN 'True positive'
   # END;;
-  dimension: net_new_indicator { ## venn diagram
-    type: string
-    sql:
-    CASE
-      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = 'True positive' then 'AML AI & Rules Based' --aml ai & rules based
-      WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} IS NULL then 'Rules Based'
-      WHEN ${rule_based} = 'False positive'AND ${aml_ai_fp_ind} = 'True positive' then 'AML AI'
-      WHEN ${rule_based} IS NULL and ${aml_ai_fp_ind} = 'True positive' then 'AML AI'
-    END;;
-  }
+  ##############################
 
-  dimension: venn_diagram { ## new logic
-    type: string
-    sql:     CASE
-      WHEN ${classification} = 'True Positive'  then 'Rules Based & AML AI'
-      WHEN ${classification} = 'False Negative'  then 'Rules Based'
-      WHEN ${classification} = 'True Positive - Not in Rule' then 'AML AI'
-    END
-    ;;
-  }
-
-## old logic
-  # dimension: net_new_indicator {
+    # dimension: aml_ai_fp_ind {
   #   type: string
   #   sql:
   #   CASE
-  #     WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = 'True positive' then '1_Detected'
-  #     WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} IS NULL then '2_Rule based exit' --
-  #     WHEN ${rule_based} = 'False positive'AND ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
-  #     WHEN ${rule_based} IS NULL and ${aml_ai_fp_ind} = 'True positive' then '3_AML AI Exit'
+  #     WHEN ${aml_ai} AND ${investigation_threshold} <= {% parameter threshold_fp %} THEN 'True positive'
+  #     WHEN ${aml_ai} AND ${investigation_threshold} > {% parameter threshold_fp %} THEN 'False positive'
+  #   END
+  #   ;;
+  # }
+  # dimension: investigation_threshold { ##fp
+  #   type: number
+  #   sql:
+  #     CASE
+  #             WHEN ${risk_period_end_raw} IS NOT NULL AND ${event_raw} IS NULL THEN RAND()
+  #             WHEN ${risk_period_end_raw} IS NOT NULL AND  ${event_raw} IS NOT NULL THEN RAND()
+  #             END;;
+  # }
+
+  # dimension: net_new_indicator { ## venn diagram
+  #   type: string
+  #   sql:
+  #   CASE
+  #     WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} = 'True positive' then 'AML AI & Rules Based' --aml ai & rules based
+  #     WHEN ${rule_based} = 'True positive' AND ${aml_ai_fp_ind} IS NULL then 'Rules Based'
+  #     WHEN ${rule_based} = 'False positive'AND ${aml_ai_fp_ind} = 'True positive' then 'AML AI'
+  #     WHEN ${rule_based} IS NULL and ${aml_ai_fp_ind} = 'True positive' then 'AML AI'
   #   END;;
   # }
 
 
-  dimension: model_output {
-    type: string
-    sql: case when ${classification} = 'True Positive' ;;
-  }
+  # dimension: model_output {
+  #   type: string
+  #   sql: case when ${classification} = 'True Positive' ;;
+  # }
 
 
 
