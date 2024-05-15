@@ -1,6 +1,5 @@
 include: "/final_demo/views/*"
 #include: "/manifest.lkml"
-include: "/final_demo/views/*"
 # include: "/updated_version/predictions.view.lkml"
 # include: "/final_demo/views/predictions_refinements.lkml"
 

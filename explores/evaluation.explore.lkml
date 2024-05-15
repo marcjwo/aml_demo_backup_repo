@@ -1,7 +1,7 @@
 include: "/updated_version/party.view.lkml"
 include: "/flat/party_fullname_mapping.view.lkml"
 include: "/flat/evaluation.view.lkml"
-include: "/final_demo/views/risk_case_event_summary.view.lkml"
+#include: "/final_demo/views/risk_case_event_summary.view.lkml"
 
 # explore: flat_evalution {
 #   from: evaluation

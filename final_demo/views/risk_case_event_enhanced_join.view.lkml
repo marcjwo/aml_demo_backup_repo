@@ -145,7 +145,6 @@ persist_for: "24 hours"
     type: unquoted
   }
 
-
   dimension: classification { ##classify
     type: string
     sql: CASE
@@ -156,7 +155,18 @@ persist_for: "24 hours"
       WHEN ${aml_ai} = true AND ${label} = 'Negative' AND  ${type} IS NOT NULL THEN 'True Positive - Not in Rule'
       WHEN ${aml_ai} = false AND ${label} = 'Negative'  AND ${type} IS NOT NULL THEN 'True Negative - Not in Rule'
       END ;;
-  }
+   }
+  # dimension: classification { ##classify
+  #   type: string
+  #   sql: CASE
+  #     WHEN ${aml_ai} = true AND ${label} = 'Positive' AND ${type} IS NOT NULL AND ${rank_risk} = 1 THEN 'True Positive'
+  #     WHEN ${aml_ai} = true AND ${label} = 'Negative' AND ${type} IS NOT NULL AND ${rank_risk} = 1 THEN 'False Positive'
+  #     WHEN ${aml_ai} = false AND ${label} = 'Negative' AND ${type} IS NOT NULL AND ${rank_risk} = 1 THEN 'True Negative'
+  #     WHEN ${aml_ai} = false AND ${label} = 'Positive' AND ${type} IS NOT NULL AND ${rank_risk} = 1 THEN 'False Negative'
+  #     WHEN ${aml_ai} = true AND ${label} = 'Negative' AND  ${type} IS NOT NULL THEN 'True Positive - Not in Rule'
+  #     WHEN ${aml_ai} = false AND ${label} = 'Negative'  AND ${type} IS NOT NULL THEN 'True Negative - Not in Rule'
+  #     END ;;
+  # }
 
   #${type} IS NULL THEN
 
