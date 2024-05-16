@@ -5,6 +5,11 @@ include: "/final_demo/views/*"
 
 explore: risk_case_event_enhanced_join {
   label: "Flat Evaluation"
+  join: predictions_enhanced {
+  type: left_outer ## full_outer
+  sql_on: ${risk_case_event_enhanced_join.party_id} = ${predictions_enhanced.party_id} ;;
+  relationship: many_to_one
+  }
 
   # join: view1 {
   #   type: left_outer
@@ -14,14 +19,10 @@ explore: risk_case_event_enhanced_join {
   #   relationship: many_to_one
   #   }
 
-  join: predictions_enhanced {
-  type: left_outer ## full_outer
-  sql_on: ${risk_case_event_enhanced_join.party_id} = ${risk_case_event_enhanced_join.party_id} ;;
-  relationship: one_to_many
-  }
-  join: risk_case_event_enhanced_rank {
-    type: left_outer
-    sql_on: ${predictions_enhanced.party_id} = ${risk_case_event_enhanced_rank.party_id};;
-    relationship: many_to_one
-  }
+
+  # join: risk_case_event_enhanced_rank {
+  #   type: left_outer
+  #   sql_on: ${predictions_enhanced.party_id} = ${risk_case_event_enhanced_rank.party_id};;
+  #   relationship: many_to_one
+  # }
 }

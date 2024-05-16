@@ -80,7 +80,7 @@ persist_for: "24 hours"
   }
   dimension: risk_label {
     type: string
-    sql: ${TABLE}.risk_label ;;
+    sql: case when ${TABLE}.risk_label is null then 'Suspicious repetitive patterns' else ${TABLE}.risk_label end;;
   }
   dimension_group: risk_period_end {
     type: time

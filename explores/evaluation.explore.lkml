@@ -8,7 +8,7 @@ include: "/flat/evaluation.view.lkml"
 include: "/final_demo/views/*"
 #include: "/manifest.lkml"
 include: "/updated_version/predictions.view.lkml"
-include: "/final_demo/views/predictions_refinements.lkml"
+#include: "/final_demo/views/predictions_refinements.lkml"
 #include: "/manifest.lkml"
 include: "/final_demo/views/*"
 # include: "/updated_version/predictions.view.lkml"
@@ -27,7 +27,7 @@ explore: evaluation {
   }
 
   join: predictions_enhanced {
-    type: left_outer ## full_outer
+    type: inner ## full_outer
     sql_on: ${evaluation.party_id} = ${evaluation.party_id} ;;
     relationship: one_to_many
   }
