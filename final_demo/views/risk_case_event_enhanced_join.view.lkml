@@ -192,29 +192,21 @@ persist_for: "24 hours"
     ;;
     }
 
-  dimension: is_rules_based {
-    type: yesno
-    sql:  ${venn_diagram} = 'Rules Based'or ${venn_diagram} = 'Rules Based & AML AI'  ;;
+  measure: total_rules_based {
+    type: count_distinct
+    sql:  case when ${venn_diagram} = 'Rules Based'or ${venn_diagram} = 'Rules Based & AML AI' then ${party_id} end  ;;
   }
 
-  dimension: is_aml_ai{
-    type: yesno
-    sql:  ${venn_diagram} = 'AML AI'or ${venn_diagram} = 'Rules Based & AML AI'  ;;
+  measure: total_aml_ai{
+    type: count_distinct
+    sql: case when ${venn_diagram} = 'AML AI'or ${venn_diagram} = 'Rules Based & AML AI' then ${party_id} end ;;
   }
 
-  dimension: is_rules_based_and_aml_ai {
-    type: yesno
-    sql:   ${venn_diagram} = 'Rules Based & AML AI'  ;;
+  measure: total_rules_based_and_aml_ai {
+    type: count_distinct
+    sql:  case when ${venn_diagram} = 'Rules Based & AML AI' then ${party_id} end  ;;
   }
 
-  dimension: venn_diagram_output {
-    type: string
-    sql: case WHEN ${is_rules_based} = 'Yes'   then 'Rules Based'
-          WHEN ${is_rules_based_and_aml_ai} = 'Yes' then 'Rules Based & AML AI'
-          WHEN ${is_aml_ai} = 'Yes' then 'AML AI'
-          end
-        ;;
-  }
 
 
 

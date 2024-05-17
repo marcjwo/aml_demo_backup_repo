@@ -26,7 +26,7 @@ explore: risk_case_event_enhanced_join {
   join: venn_diagram {
     type: left_outer
     relationship: many_to_one
-    sql: ${venn_diagram.party_id} = ${risk_case_event_enhanced_join.party_id};;
+    sql: ${venn_diagram.venn_diagram} = ${risk_case_event_enhanced_join.venn_diagram};;
 
   }
 
