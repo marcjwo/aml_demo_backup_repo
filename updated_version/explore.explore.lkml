@@ -7,7 +7,7 @@ include: "/updated_version/explainability.view.lkml"
 include: "/updated_version/transaction.view.lkml"
 include: "/updated_version/account_party_link.view.lkml"
 include: "/views/demo_mock/feature_family_desc.view.lkml"
-
+include: "/final_demo/views/risk_case_event_enhanced_join.view.lkml"
 include: "/flat/*.view.lkml"
 # explore: risk_case_event_enhanced {
 
@@ -92,5 +92,10 @@ explore: explainability {
     type: left_outer
     relationship: many_to_one
     sql_on: ${feature_family_desc.feature_family_name} = ${explainability__attributions.feature_family};;
+  }
+  join: risk_case_event_enhanced_join {
+  type: left_outer ## full_outer
+  sql_on: ${risk_case_event_enhanced_join.party_id} = ${explainability.party_id} ;;
+  relationship: many_to_many
   }
 }

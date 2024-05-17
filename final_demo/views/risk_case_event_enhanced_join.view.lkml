@@ -116,23 +116,23 @@ persist_for: "24 hours"
     filters: [rank_risk: "1"]
   }
 
-  parameter: investigation_threshold {
-    type: unquoted
-  }
+  # parameter: investigation_threshold {
+  #   type: unquoted
+  # }
 
-  measure: count_of_parties {
-    type: number
-    sql: CASE WHEN ${classification} =  'True Negative - Not in Rule'then count(${party_id})*{% parameter investigation_threshold %}
-         WHEN ${classification}  = 'True Positive - Not in Rule' THEN count(${party_id})
-    WHEN (${classification}  != 'True Positive - Not in Rule' OR ${classification}  !=  'True Negative - Not in Rule')
-    AND ${rank_risk} = 1 THEN count(${party_id})*(1-{% parameter investigation_threshold %}) END;;
-  }
+  # measure: count_of_parties {
+  #   type: number
+  #   sql: CASE WHEN ${classification} =  'True Negative - Not in Rule'then count(${party_id})*{% parameter investigation_threshold %}
+  #       WHEN ${classification}  = 'True Positive - Not in Rule' THEN count(${party_id})
+  #   WHEN (${classification}  != 'True Positive - Not in Rule' OR ${classification}  !=  'True Negative - Not in Rule')
+  #   AND ${rank_risk} = 1 THEN count(${party_id})*(1-{% parameter investigation_threshold %}) END;;
+  # }
 
 
   ###added
 
   parameter: threshold { ## AML AI
-    type: unquoted
+    type: number
   }
 
   dimension: classification { ##classify
@@ -176,11 +176,48 @@ persist_for: "24 hours"
   #   type: string
   #   sql:     CASE
   #     WHEN ${classification} = 'True Positive'  then 'Rules Based & AML AI'
-  #     WHEN ${classification} = 'False Negative'  then 'Rules Based'
-  #     WHEN ${classification} = 'True Positive - Not in Rule' then 'AML AI'
+  #     WHEN (${classification} = 'False Negative' or  ${classification} = 'True Positive') then 'Rules Based'
+  #     WHEN ( ${classification} = 'True Positive - Not in Rule' or ${classification} = 'True Positive') then 'AML AI'
   #   END
   #   ;;
   # }
+
+  dimension: venn_diagram { ## not needed
+    type: string
+    sql:     CASE
+      WHEN ${classification} = 'True Positive'  then 'Rules Based & AML AI'
+      WHEN ${classification} = 'False Negative' then 'Rules Based'
+      WHEN ${classification} = 'True Positive - Not in Rule'  then 'AML AI'
+    END
+    ;;
+    }
+
+  dimension: is_rules_based {
+    type: yesno
+    sql:  ${venn_diagram} = 'Rules Based'or ${venn_diagram} = 'Rules Based & AML AI'  ;;
+  }
+
+  dimension: is_aml_ai{
+    type: yesno
+    sql:  ${venn_diagram} = 'AML AI'or ${venn_diagram} = 'Rules Based & AML AI'  ;;
+  }
+
+  dimension: is_rules_based_and_aml_ai {
+    type: yesno
+    sql:   ${venn_diagram} = 'Rules Based & AML AI'  ;;
+  }
+
+  dimension: venn_diagram_output {
+    type: string
+    sql: case WHEN ${is_rules_based} = 'Yes'   then 'Rules Based'
+          WHEN ${is_rules_based_and_aml_ai} = 'Yes' then 'Rules Based & AML AI'
+          WHEN ${is_aml_ai} = 'Yes' then 'AML AI'
+          end
+        ;;
+  }
+
+
+
 
   #############################
     ##old logic

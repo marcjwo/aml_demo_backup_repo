@@ -131,7 +131,7 @@ view: party__residencies {
   dimension: region_code {
     type: string
     description: "MANDATORY: Country or region in two-letter Unicode CLDR code format."
-    sql: region_code ;;
+    sql: case when region_code is null then 'US' else region_code end;;
   }
 }
 

@@ -20,7 +20,7 @@ view: explainability {
   }
   dimension_group: risk_period_end {
     type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
+    timeframes: [raw, time, date, week, month, month_name,quarter, year]
     sql: ${TABLE}.risk_period_end_time ;;
   }
   measure: count {
@@ -49,7 +49,7 @@ view: explainability__attributions {
     value_format_name: decimal_2
     link: {
       label: "View Attribution Overview"
-      url: "/dashboards/15?&Party+ID={{ _filters['explainability.party_id'] | url_encode }}"
+      url: "/dashboards/15?&Feature+Family={{ feature_family_desc.feature_family_name }}&Party+ID={{ _filters['explainability.party_id'] | url_encode }}&Party+Name={{ _filters['party_fullname_mapping.full_name'] | url_encode }}&Risk+Period+End+Month={{ _filters['explainability.risk_period_end_month'] | url_encode }}&Risk+Period+End+Date={{ _filters['explainability.risk_period_end_date'] | url_encode }}"
     }
   }
 }

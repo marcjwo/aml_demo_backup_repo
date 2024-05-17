@@ -2,6 +2,8 @@ include: "/final_demo/views/*"
 #include: "/manifest.lkml"
 # include: "/updated_version/predictions.view.lkml"
 # include: "/final_demo/views/predictions_refinements.lkml"
+include: "/flat/party_fullname_mapping.view.lkml"
+include: "/updated_version/explainability.view.lkml"
 
 explore: risk_case_event_enhanced_join {
   label: "Flat Evaluation"
@@ -9,6 +11,23 @@ explore: risk_case_event_enhanced_join {
   type: left_outer ## full_outer
   sql_on: ${risk_case_event_enhanced_join.party_id} = ${predictions_enhanced.party_id} ;;
   relationship: many_to_one
+  }
+  join: party_fullname_mapping {
+    view_label: "Party"
+    type: left_outer
+    sql_on: ${risk_case_event_enhanced_join.party_id} = ${party_fullname_mapping.party_party_id};;
+    relationship: many_to_one
+  }
+  join: explainability {
+    type: left_outer
+    sql_on: ${explainability.party_id} = ${risk_case_event_enhanced_join.party_id} ;;
+    relationship: many_to_many
+  }
+  join: venn_diagram {
+    type: left_outer
+    relationship: many_to_one
+    sql: ${venn_diagram.party_id} = ${risk_case_event_enhanced_join.party_id};;
+
   }
 
   # join: view1 {

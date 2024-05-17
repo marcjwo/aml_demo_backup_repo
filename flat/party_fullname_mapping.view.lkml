@@ -10,10 +10,10 @@ view: party_fullname_mapping {
         'September 2022' AS flat_evalution_risk_month_year, 'Angelina Fry' AS full_name, '0SSGDFA1106TIRP5' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Jacoby Rivers' AS full_name, 'B16QI3K69DI0RXN6' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Kiana Benitez' AS full_name, 'B16QI3K69DI0RXN6' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Kiana Benitez' AS full_name, 'IXP2YUDRUC4YR3G1' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Jacoby Rivers' AS full_name, 'IXP2YUDRUC4YR3G1' AS party_party_id
       UNION ALL
       SELECT
         'September 2022' AS flat_evalution_risk_month_year, 'Justice Booker' AS full_name, 'DLPX6IYMQJCXFZAC' AS party_party_id
