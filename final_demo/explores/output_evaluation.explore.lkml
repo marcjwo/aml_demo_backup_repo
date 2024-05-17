@@ -1,7 +1,4 @@
 include: "/final_demo/views/*"
-#include: "/manifest.lkml"
-# include: "/updated_version/predictions.view.lkml"
-# include: "/final_demo/views/predictions_refinements.lkml"
 include: "/flat/party_fullname_mapping.view.lkml"
 include: "/updated_version/explainability.view.lkml"
 
@@ -24,8 +21,8 @@ explore: risk_case_event_enhanced_join {
     relationship: many_to_many
   }
   join: venn_diagram {
-    type: left_outer
-    relationship: many_to_one
+    type: inner
+    relationship: one_to_one
     sql: ${venn_diagram.venn_diagram} = ${risk_case_event_enhanced_join.venn_diagram};;
 
   }
