@@ -33,11 +33,26 @@ bind_all_filters: yes
     type: number
   }
 
+  measure: rules_based {
+    type: sum
+    sql:  case when ${venn_diagram} = 'Rules Based'or ${venn_diagram} = 'Rules Based & AML AI' then ${party_count} end  ;;
+  }
+
+  measure: aml_ai{
+    type: count_distinct
+    sql: case when ${venn_diagram} = 'AML AI'or ${venn_diagram} = 'Rules Based & AML AI' then ${party_count} end ;;
+  }
+
+  measure: rules_based_and_aml_ai {
+    type: count_distinct
+    sql:  case when ${venn_diagram} = 'Rules Based & AML AI' then ${party_count} end  ;;
+  }
+
   measure: total_output {
     type: number
-    sql: case when ${venn_diagram} = 'Rules Based' then sum(${total_rules_based})
-    when ${venn_diagram} = 'AML AI' then sum(${total_aml_ai})
-     when ${venn_diagram} = 'Rules Based & AML AI ' then sum(${total_rules_based_and_aml_ai})
+    sql: case when ${venn_diagram} = 'Rules Based' then ${total_rules_based}
+    when ${venn_diagram} = 'AML AI' then ${total_aml_ai}
+     when ${venn_diagram} = 'Rules Based & AML AI ' then ${total_rules_based_and_aml_ai}
     end;;
   }
 }

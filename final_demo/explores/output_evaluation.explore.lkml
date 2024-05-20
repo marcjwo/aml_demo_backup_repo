@@ -23,7 +23,7 @@ explore: risk_case_event_enhanced_join {
   join: venn_diagram {
     type: inner
     relationship: one_to_one
-    sql: ${venn_diagram.venn_diagram} = ${risk_case_event_enhanced_join.venn_diagram};;
+    sql_on: ${venn_diagram.venn_diagram} = ${risk_case_event_enhanced_join.venn_diagram};;
 
   }
 
