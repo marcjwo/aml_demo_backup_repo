@@ -7,64 +7,64 @@ view: party_fullname_mapping {
     derived_table: {
       sql:
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Angelina Fry' AS full_name, '0SSGDFA1106TIRP5' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Angelina Fry' AS full_name, 'F2XH5VE8QJR12A4R' AS party_party_id
       UNION ALL
       SELECT
         'September 2022' AS flat_evalution_risk_month_year, 'Kiana Benitez' AS full_name, 'B16QI3K69DI0RXN6' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Jacoby Rivers' AS full_name, 'IXP2YUDRUC4YR3G1' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Jacoby Rivers' AS full_name, 'YQMD7PEZRH7GW1PM' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Justice Booker' AS full_name, 'DLPX6IYMQJCXFZAC' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Justice Booker' AS full_name, 'Y7E8IGZRB9M1BHVH' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Nataly McMillan' AS full_name, '05BYE33TOBM3JEDO' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Nataly McMillan' AS full_name, 'W6G5PBYOGFKTDO7F' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Rocky Wiggins' AS full_name, 'BG82BX4IEQMNZWUE' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Rocky Wiggins' AS full_name, '4OYI8UIY1N97BOMU' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Capri Casey' AS full_name, '4UU8U88R9G3M9HT3' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Capri Casey' AS full_name, 'OBBAOUU18T9BFS0F' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Armando Duarte' AS full_name, 'HMYWD0VLN2NST9BV' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Armando Duarte' AS full_name, 'Y6TK9Y5FTWPZZ3W7' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Kynlee Cherry' AS full_name, '7AW7HSNJ92DD58VR' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Kynlee Cherry' AS full_name, 'V5VKO8WSEL95J8L7' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Rome Salinas' AS full_name, 'I0AYCOQYUGG7SVB7' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Rome Salinas' AS full_name, '2CE2C08ROY3QM2K7' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Royalty Compton' AS full_name, '32RB8LLEUOUOWUAR' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Royalty Compton' AS full_name, 'PTI3SX2E09MWQE9C' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Abner Gonzales' AS full_name, 'OZGMHESTD3TS8P0Y' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Abner Gonzales' AS full_name, 'A18P2PZCNQ3U4BXA' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Hadley Massey' AS full_name, '9AX8KQQUCZRTX2ZT' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Hadley Massey' AS full_name, 'K94EXFSG6S2H61LD' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Donald Kirk' AS full_name, 'AY03RTAKDZ0BAOWU' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Donald Kirk' AS full_name, 'W6OE1BX0FOFQ0L71' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Ellis Jenkins' AS full_name, 'EIR9DXBTR9RKF9MK' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Ellis Jenkins' AS full_name, 'HNNL9JA22DT2443G' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Declan Gill' AS full_name, '1SBOOF8TUG1RELTW' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Declan Gill' AS full_name, 'JKAIHPQY1U38X1M4' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Jordan McFarland' AS full_name, 'FU33W123M9DDPKDY' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Jordan McFarland' AS full_name, 'DTD6OV4B4UN42N2A' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Dane Franco' AS full_name, 'S87CBV3GHYRCRUZE' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Dane Franco' AS full_name, 'Z0AP044YDI8PB9ML' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Charleigh Valentine' AS full_name, 'W25QD31EL6MT8KLT' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Charleigh Valentine' AS full_name, 'VI3HB3BPGSNXG2DL' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Demetrius Trevino' AS full_name, 'N3CM8AVOD51K72BJ' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Demetrius Trevino' AS full_name, 'QT7NY0SAQ89XQU35' AS party_party_id
       UNION ALL
       SELECT
         'September 2022' AS flat_evalution_risk_month_year, 'Priscilla Lu' AS full_name, '15DY415Y6I70T50T' AS party_party_id
