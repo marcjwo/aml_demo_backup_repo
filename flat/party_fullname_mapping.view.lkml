@@ -67,7 +67,7 @@ view: party_fullname_mapping {
         'September 2022' AS flat_evalution_risk_month_year, 'Demetrius Trevino' AS full_name, 'QT7NY0SAQ89XQU35' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Priscilla Lu' AS full_name, '15DY415Y6I70T50T' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Priscilla Lu' AS full_name, 'DTD6OV4B4UN42N2A' AS party_party_id
       UNION ALL
       SELECT
         'September 2022' AS flat_evalution_risk_month_year, 'Duncan Spencer' AS full_name, 'O2QBDJ9XRFAKPV8F' AS party_party_id
