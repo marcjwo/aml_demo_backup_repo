@@ -46,7 +46,7 @@ view: party_fullname_mapping {
         'September 2022' AS flat_evalution_risk_month_year, 'Hadley Massey' AS full_name, 'A18P2PZCNQ3U4BXA' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Donald Kirk' AS full_name, 'W6OE1BX0FOFQ0L71' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Donald Kirk' AS full_name, 'K94EXFSG6S2H61LD' AS party_party_id
       UNION ALL
       SELECT
         'September 2022' AS flat_evalution_risk_month_year, 'Ellis Jenkins' AS full_name, 'HNNL9JA22DT2443G' AS party_party_id
