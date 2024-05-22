@@ -28,7 +28,7 @@ view: party_fullname_mapping {
         'September 2022' AS flat_evalution_risk_month_year, 'Capri Casey' AS full_name, '4OYI8UIY1N97BOMU' AS party_party_id
       UNION ALL
       SELECT
-        'September 2022' AS flat_evalution_risk_month_year, 'Armando Duarte' AS full_name, 'Y6TK9Y5FTWPZZ3W7' AS party_party_id
+        'September 2022' AS flat_evalution_risk_month_year, 'Armando Duarte' AS full_name, 'OBBAOUU18T9BFS0F' AS party_party_id
       UNION ALL
       SELECT
         'September 2022' AS flat_evalution_risk_month_year, 'Kynlee Cherry' AS full_name, 'V5VKO8WSEL95J8L7' AS party_party_id
