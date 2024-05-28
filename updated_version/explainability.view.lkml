@@ -49,7 +49,7 @@ view: explainability__attributions {
     value_format_name: decimal_2
     link: {
       label: "View Attribution Overview"
-      url: "/dashboards/15?feature+family={{ _filters['feature_family_desc.feature_family_name'] | url_encode }}&Full+Name={{ _filters['party_fullname_mapping.full_name'] | url_encode }}&Risk+Period+End+Month={{ _filters['explainability.risk_period_end_month'] | url_encode }}"
+      url: "/dashboards/15?Feature+Family={{ _filters['feature_family_desc.feature_family_name'] | url_encode }}&Full+Name={{ _filters['party_fullname_mapping.full_name'] | url_encode }}&Risk+Period+End+Month={{ _filters['explainability.risk_period_end_month'] | url_encode }}"
     }
   }
 }
