@@ -1,6 +1,7 @@
 include: "/final_demo/views/*"
 include: "/flat/party_fullname_mapping.view.lkml"
 include: "/updated_version/explainability.view.lkml"
+include: "/updated_version/party.view.lkml"
 
 explore: risk_case_event_enhanced_join {
   label: "Flat Evaluation"
@@ -24,7 +25,11 @@ explore: risk_case_event_enhanced_join {
     type: inner
     relationship: one_to_one
     sql_on: ${venn_diagram.venn_diagram} = ${risk_case_event_enhanced_join.venn_diagram};;
-
+  }
+  join: party {
+    type: inner
+    sql_on: ${party.party_id} = ${risk_case_event_enhanced_join.party_id} ;;
+    relationship: one_to_one
   }
 
   # join: view1 {
